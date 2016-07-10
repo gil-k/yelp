@@ -40,7 +40,7 @@ if not IS_PRODUCTION:
 def index():
     """ Home Page """
     return render_template('index.html', page_id_1='Visual Yelp', page_url_1='/yelp/',
-        page_id_2='LinkedIn', page_url_2='')
+        page_id_2='LinkedIn', page_url_2='https://www.linkedin.com/in/gilkwak')
 
 
 @app.route('/yelp/')
