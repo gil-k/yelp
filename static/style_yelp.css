@@ -1,0 +1,226 @@
+html {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+}
+body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		font-family: Helvetica Neue, Helvetica, Arial, Sans-Serif;
+		font-size:14px;
+		background-color: #ffffef;
+}
+#top_banner {
+		background-image: url(/static/yelp_images/yelp_red_pixel.png);
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 80px;
+		position: absolute;
+		z-index: 500;
+		/*text-align: center;*/
+}
+#top_banner.stickTop {
+/*	float: right;*/
+		position: fixed;
+		right: 0;
+}
+#wrap{
+		margin:0 auto;
+		width: 952px;
+		height: 80px;
+}
+#banner_visualYelp {
+	top: 0px;
+	left: 0px;
+	height: 80px;
+	width: 217px;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner1.png);
+}
+#banner_findText {
+	top: -80px;
+	left: 217px;
+	height: 80px;
+	width: 35px;
+	line-height: 80px;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner2.png);
+}
+#banner_termInputField {
+	top: -160px;
+	left: 252px;
+	height: 80px;
+	width: 288px;
+	line-height: 80px;
+	text-align: left;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner3.png);
+}
+/* Yelp Category input box */
+#term {
+	padding-left: 2px;
+	font-size:14px;
+	color: #999999;
+    border: none;
+    outline-width: 0;
+}
+#banner_inputFieldDivider {
+	top: -240px;
+	left: 540px;
+	height: 80px;
+	width: 14px;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner4.png);
+}
+#banner_nearText {
+	top: -320px;
+	left: 554px;
+	height: 80px;
+	width: 35px;
+	line-height: 80px;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner2.png);
+}
+#banner_locInputField {
+	top: -400px;
+	left: 589px;
+	height: 80px;
+	width: 286px;
+	line-height: 80px;
+	text-align: left;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner5.png);
+}
+/* Yelp location input box */
+#location {
+	font-size:14px;
+	color: #333333;
+	border: none;
+	padding-left: 3px;
+	outline-width: 0;
+	width: 100%;
+}
+#banner_inputFieldEnd {
+	top: -480px;
+	left: 875px;
+	height: 80px;
+	width: 77px;
+	position: relative; 
+	background-image: url(/static/yelp_images/banner7a.png);
+}
+#banner_button {
+	top: -538px;
+	left: 885px;
+	height: 36px;
+	width: 50px;
+	position: relative; 
+}
+/*#results{
+	top: 80px;
+	width: 100%;
+	height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative; 
+}*/
+#search_results{
+	top: 84px;
+/*    overflow-x: hidden;
+    overflow-y: hidden;*/
+  white-space: nowrap;
+	position: relative; 
+	/*background-color: #ffffef;*/
+}
+/*#buss_container {
+	text-align: left;
+	position: relative; 
+}*/
+#buss_info{
+	display: inline-block;
+	margin-right: -100%;
+	width: 100%;
+	text-align: left;
+	vertical-align: top;
+/*	background-color: rgba(255, 255, 255, 1);*/
+
+/*	text-shadow: -1px 1px #000000;
+	text-shadow: 1px 0px #000000;
+	text-shadow: -1px -1px #ffffff;
+	text-shadow: 1px 0px #ffffff;*/
+	position: relative; 
+}
+.outline {
+	color: black;
+    text-shadow:
+    -1px -1px #ffffff,
+    1px -1px #ffffff,
+    -1px 1px #ffffff,
+    1px 1px #ffffff;  
+}
+#map {
+	top: 84px;
+	right: 0px;
+	width: 226px;
+	height: 226px;
+	float: right;
+	z-index: 200;
+	position: absolute;
+	/*background-color: #ffefff;*/
+}
+#map.stickTop {
+	top: 0px;
+	position: fixed;
+}
+#map.stickRight {
+	right: 0px;
+	position: fixed;
+}
+
+#loading_overlay {
+		background: #e9e9e9;
+		display: none;
+		position: absolute;
+		top: 80px;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1;
+		opacity: 0.7;
+}
+#spinner_layer {
+	z-index: 10;
+}
+#spinner_background {
+    top:47%;
+    left:47%;
+/*	top: 180px;
+	left: 436px;*/
+	width: 80px;
+	height: 80px;
+	display: none;
+	z-index: 10;
+	position: fixed; 
+}
+#spinner {
+	top:47%;
+    left:47%;
+/*	top: 180px;
+	left: 436px;*/
+	width: 80px;
+	height: 80px;
+	display: none;
+	z-index: 100;
+	position: fixed; 
+}
+
+/*#gray_square {
+	display: none;
+}
+#loading {
+	display: none;
+}*/
+#out {
+		white-space: nowrap;
+}

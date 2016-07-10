@@ -1,0 +1,39 @@
+body {
+	font-family: Helvetica Neue, Helvetica, Arial, Sans-Serif;
+	font-size:14px;
+	background-color: #ffffff;
+}
+footer {
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100px;
+	background-color: #87CEFA;
+	position: absolute;
+}
+#wrap {
+	margin:0 auto;
+}
+#banner {
+	top: 0px;
+	margin: auto;
+	height: 100px;
+	width: 600px;
+	position: relative; 
+	background-image: url('/static/banner.png');
+}
+
+#main {
+	top: 150px;
+	left: 50px;
+	position: relative; 
+}
+
+#link1 {
+	position: relative; 
+}
+
+#link2 {
+	top: 30px;
+    position: relative; 
+}

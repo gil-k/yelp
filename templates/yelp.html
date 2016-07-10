@@ -1,0 +1,175 @@
+{% extends "master_yelp.html" %}
+
+{% block body %}
+
+<footer id="top_banner">
+    <div id="wrap">
+        <div id="banner_visualYelp"></div>
+        <div id="banner_findText"><b>Find</b></div>
+        <div id="banner_termInputField"><input type='text' id='term' class='cleardefault'  value='' ></div>
+        <div id="banner_inputFieldDivider"></div>
+        <div id="banner_nearText"><b>Near</b></div>
+        <div id="banner_locInputField"><input type='text' id='location' class='cleardefault' 
+                              value=''></div><!-- value='address, neighborhood, city, state or zip'></div> -->
+                              
+        <div id="banner_inputFieldEnd"></div>
+        <div id="banner_button">
+            <a href="#" onclick="searchYelp()">
+                <img src="/static/yelp_images/banner8a.png" 
+                     onmouseover = "this.src = '/static/yelp_images/banner8b.png'" 
+                     onmouseout = "this.src = '/static/yelp_images/banner8a.png'">
+                </img>
+            </a>
+        </div>
+
+    </div>
+
+</footer> 
+
+<div id="map"></div>
+
+<div id="results">
+  <div id="search_results"></div>
+</div>
+
+<div id="loading_overlay"></div>
+
+<div id="spinner_layer">
+    <img id="spinner_background" src="/static/yelp_images/gray_rounded_square3.png"></img>
+    <img id="spinner" src="/static/yelp_images/warm_grey_spinner.gif" alt="loading..."></img>
+</div>
+
+
+<!-- <br><br><br><br><br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{loc}} -->
+
+<script type="text/javascript">
+  function initInputFields(){
+    $el_term = document.getElementById('term');
+    if($el_term.value.trim() === ''){
+      $el_term.value = 'dinner';
+    }
+
+    $el_loc = document.getElementById('location');
+    if($el_loc.value.trim() === ''){
+      $el_loc.value = {{loc|tojson}};
+      if($el_loc.value.trim() === ''){
+        $el_loc.value = 'San Francisco, CA';
+      }
+    }
+  }
+</script>
+
+<script type="text/javascript">
+    var $window = $(window),
+        $mapEl = $("#map"),
+        $bannerEl = $('#top_banner');
+        // $stickyBussInfo = $('#buss_info'),
+        // elTop = $mapEl.offset().top;
+
+    $window.scroll(function() {
+      // $mapEl.toggleClass('stickTop', $window.scrollTop() > elTop);
+      $mapEl.css({right: '0px', position: 'fixed'});
+      $bannerEl.toggleClass('stickTop', true);
+
+      //$stickyBussInfo.toggleClass('sticky', true);
+    });
+</script>
+
+<script type="text/javascript">
+  $("#term").keyup(function (e) {
+    if (e.keyCode == 13) {
+        searchYelp();
+    }
+  });
+  $("#location").keyup(function (e) {
+    if (e.keyCode == 13) {
+        searchYelp();
+    }
+  });
+</script>
+
+
+<script type="text/javascript">
+  var map;
+  function initMap(coords, lats, lngs) {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: lats[coords], lng: lngs[coords]},
+      zoomControl: true,
+      mapTypeControl: false,
+      scaleControl: false,
+      streetViewControl: false,
+      rotateControl: false,
+      fullscreenControl: false,
+      zoom: 11
+    });
+
+    var marker;
+    for (var i=0; i < (coords); i++){
+      marker = new google.maps.Marker({
+        position: {lat: lats[i], lng: lngs[i]},
+        label: {
+                text: i.toString(), 
+                color: 'white'
+              },
+        map: map
+      });
+    };
+  }    
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap"
+async>
+</script>
+
+<script type="text/javascript">
+    function searchYelp(){ 
+
+        var $loading_overlay = $("#loading_overlay"),
+            $spinner = $("#spinner"),
+            $spinner_background = $("#spinner_background");
+
+        var term = document.getElementById('term').value;
+        var location = document.getElementById('location').value;
+        var url = "/search/?term=" + term + "&location=" + location;
+
+        window.scrollTo(0, 0);
+        $loading_overlay.show();
+        $spinner.show();
+        $spinner_background.show();
+
+        // $("#spinner_background").style.display = 'inline-block'; 
+
+        $.getJSON(url, function(data){
+            // $("#search_results").html(data);
+            coords = data['coords'];
+            lats = data['lats'];
+            lngs = data['lngs'];
+
+            
+
+            $("#search_results").html(data['html']);
+
+            initMap(coords, lats, lngs);
+
+            // $("#spinner_background").style.display = 'none'; 
+            $loading_overlay.hide();
+            $spinner.hide();
+            $spinner_background.hide();
+          });
+    }
+</script>
+
+<script defer type="text/javascript">
+  initInputFields();
+  searchYelp();
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

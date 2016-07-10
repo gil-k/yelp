@@ -1,0 +1,104 @@
+{% extends "master_yelp.html" %}
+
+{% block body %}
+
+<div>
+
+<div id="field1"><input type='text' id='term' class='cleardefault'  value='dinner' ></div>
+
+<div id="field2"><input type='text' id='location' class='cleardefault'  value='San Francisco, CA' ></div>
+
+<div id="button">
+    <a href="#" onclick="doSearch()">
+        <img src="/static/_yelp_images/banner8a.png" onmouseover = "this.src = '/static/_yelp_images/banner8b.png'" 
+                     onmouseout = "this.src = '/static/_yelp_images/banner8a.png'" /></img>
+    </a>
+</div>
+<div id="newmap"></div>
+<div id="text"></div>
+<div id="out"><font size="6">Ignorant branched humanity led now marianne too strongly entrance. Rose to shew bore no ye of paid rent form. Old design are dinner better nearer silent excuse.
+<p><br><br><br><br><br>Ignorant branched humanity led now marianne too strongly entrance.
+<p><br><br><br><br><br>Ignorant branched humanity led now marianne too strongly entrance.
+<p><br><br><br><br><br>Ignorant branched humanity led now marianne too strongly entrance.
+<p><br><br><br><br><br>Ignorant branched humanity led now marianne too strongly entrance. 
+<p><br><br><br><br><br>Ignorant branched humanity led now marianne too strongly entrance.</font></div>
+
+</div>
+
+<script type="text/javascript">
+  var $window = $(window),
+      $mapEl = $('#newmap'),
+      elTop = $mapEl.offset().top;
+
+  $window.scroll(function() {
+    $mapEl.toggleClass('sticky', $window.scrollTop() > elTop);
+    $mapEl.toggleClass('stayRight', true);
+  });
+</script>
+
+
+
+<script type="text/javascript">
+  function doSearch(){
+    //initInputFields();
+    alert("starting");
+    var term = document.getElementById('term').value;
+    var location = document.getElementById('location').value;
+
+    var url = "/search/?term=" + term + "&location=" + location;
+    $.getJSON(url,
+      function(data){
+alert("starting2");
+      coords = data['coords'];
+      lats = data['lats'];
+      lngs = data['lngs'];
+
+      $("#text").html(data['html']);
+    });
+  }
+</script>
+
+{% endblock %}
+
+<!-- <script type="text/javascript">
+  var map;
+  function initMap(coords, lats, lngs) {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 37.7, lng: -122.4},
+      zoomControl: true,
+      mapTypeControl: false,
+      scaleControl: false,
+      streetViewControl: false,
+      rotateControl: false,
+      fullscreenControl: false,
+      zoom: 11
+    });
+  }    
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap"
+async>
+</script> -->
+
+<!-- <script type="text/javascript">
+  function initInputFields(){
+    $el_term = document.getElementById('term');
+    if($el_term.value.trim() === ''){
+      $el_term.value = 'dinner';
+    }
+
+    $el_loc = document.getElementById('location');
+    if($el_loc.value.trim() === ''){
+      $el_loc.value = {{loc|tojson}};
+      if($el_loc.value.trim() === ''){
+        $el_loc.value = 'San Francisco, CA';
+      }
+    }
+  }
+</script> -->
+
+<!-- <script async defer type="text/javascript">
+  initInputFields();
+  yelpSearch();
+</script> -->
+
