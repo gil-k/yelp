@@ -25,6 +25,8 @@ from yelp2.businesses import Businesses
 CREDENTIAL_FILE = 'static/config_secret.json'
 # Url path for biz-photos (photo box) images
 PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
+
+BUSINESS_PATH = 'http://www.yelp.com/biz/'
 # Limit on number of businesses returned from the search
 SEARCH_LIMIT = 10
 # Limit on the number of biz-photo (photo box) images
@@ -111,7 +113,11 @@ def main():
 
     # Obtain business info (name, rating, address, etc.) and
     # urls for biz-photo (photo box) images for each businesses
-    buss_obj = Businesses(response, PHOTO_BOX_PATH, SEARCH_LIMIT, PHOTO_LIMIT)
+    buss_obj = Businesses(response, 
+                          BUSINESS_PATH,
+                          PHOTO_BOX_PATH, 
+                          SEARCH_LIMIT, 
+                          PHOTO_LIMIT)
 
     ret_val = buss_obj.get_biz_photos(response)
 

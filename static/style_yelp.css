@@ -143,31 +143,29 @@ body {
 	width: 100%;
 	text-align: left;
 	vertical-align: top;
-/*	background-color: rgba(255, 255, 255, 1);*/
-
-/*	text-shadow: -1px 1px #000000;
-	text-shadow: 1px 0px #000000;
-	text-shadow: -1px -1px #ffffff;
-	text-shadow: 1px 0px #ffffff;*/
 	position: relative; 
 }
 .outline {
-	color: black;
+		color: black;
+		text-decoration: none;
     text-shadow:
     -1px -1px #ffffff,
     1px -1px #ffffff,
     -1px 1px #ffffff,
     1px 1px #ffffff;  
 }
+#business_link {
+	text-decoration: none
+}
+
 #map {
-	top: 84px;
-	right: 0px;
-	width: 226px;
-	height: 226px;
-	float: right;
-	z-index: 200;
-	position: absolute;
-	/*background-color: #ffefff;*/
+		top: 84px;
+		right: 0px;
+		width: 226px;
+		height: 226px;
+		float: right;
+		z-index: 200;
+		position: absolute;
 }
 #map.stickTop {
 	top: 0px;
@@ -176,6 +174,17 @@ body {
 #map.stickRight {
 	right: 0px;
 	position: fixed;
+}
+
+#map_hide {
+		top: 290px;
+		right: 230px;
+		width: 20px;
+		height: 20px;
+		/*float: right;*/
+		z-index: 500;
+		position: absolute;	
+		background-color: #ffefff;
 }
 
 #loading_overlay {

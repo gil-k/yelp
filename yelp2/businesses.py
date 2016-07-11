@@ -10,9 +10,15 @@ PIC_FILTER = '?tab=food'
 
 class Businesses(object):
 
-    def __init__(self, response, photo_box_path, search_limit, photo_limit):
+    def __init__(self, 
+                 response, 
+                 business_path,
+                 photo_box_path, 
+                 search_limit, 
+                 photo_limit):
         # Response from Yelp search
         self.response = response
+        self.business_path = business_path
         # Url for photo box images for each businesses
         self.photo_box_path = photo_box_path
         # Limit on number of businesses returned from the search
@@ -143,10 +149,21 @@ class Businesses(object):
         return json.dumps(ret_val)
 
     def get_buss_info(self, business):
+        link_start = ''.join(["<a href='", 
+                              self.business_path,
+                              business['id'],
+                              "' id='business_link' target='_blank'" ])
+
+        name = ''.join(["&nbsp;<font size='3' color='696969'><b>", 
+                        business['name'], "</b>&nbsp;"])
+        # address = ', '.join(business['location']['display_address'])
+
         #rating  = ''.join(["<img src='", business['rating_img_url_large'],"' class='rotate270'/>"])
         # rating  = ''.join(["<img src='", business['rating_img_url_large'], "' width='133' height='24'/>"])
         # rating  = ''.join(["&nbsp;&nbsp;&nbsp;<img src='", business['rating_img_url_large'], "' width='66' height='12'/>"])
-        rating  = ''.join(["&nbsp;&nbsp;&nbsp;<img src='", business['rating_img_url_large'], "' width='83' height='15'/>"])
+        rating  = ''.join(["&nbsp;&nbsp;&nbsp;<img src='", 
+                           business['rating_img_url_large'], 
+                           "' width='83' height='15'/>"])
         # rating  = ''.join(["&nbsp;<img src='", business['rating_img_url_small'], "'/>"])
         #rating  = ''.join(["<img src='", business['rating_img_url_large'], "' />"])
 
@@ -154,8 +171,7 @@ class Businesses(object):
         reviews  = ''.join(["&nbsp;",
                             str(business['review_count']),
                             "&nbsp;reviews,&nbsp;"])
-        name = ''.join(["&nbsp;<font size='3'><b>", business['name'], "</b>&nbsp;"])
-        # address = ', '.join(business['location']['display_address'])
+
 
         str_address = ''.join(business['location']['address'])
 
@@ -170,8 +186,10 @@ class Businesses(object):
                             # ", ", 
                             # loc['city']
                             # ])
+        link_end = "</a>"
 
-        return ''.join([name, rating, reviews, address])
+        # return ''.join([name, rating, reviews, address])
+        return ''.join([link_start, name, rating, reviews, address, link_end])
 
         # return ''.join([rating, 
         #                 "&nbsp; <font size='4' color='#666666'>", 
