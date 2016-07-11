@@ -65,8 +65,8 @@ a { color: inherit; }
 	padding-left: 2px;
 	font-size:14px;
 	color: #999999;
-    border: none;
-    outline-width: 0;
+  border: none;
+  outline-width: 0;
 }
 #banner_inputFieldDivider {
 	top: -240px;
@@ -112,6 +112,28 @@ a { color: inherit; }
 	position: relative; 
 	background-image: url(/static/yelp_images/banner7a.png);
 }
+
+/*::-webkit-input-placeholder {
+    color:    #999999;
+}
+:-moz-placeholder {
+    color:    #999999;
+}
+::-moz-placeholder {
+    color:    #999999;
+}
+:-ms-input-placeholder {
+    color:    #999999;
+}
+input type='text' {
+    color:#000;
+    background:#aaa;
+    padding:3px;
+    margin:5px;
+    font-family:Arial;
+    border:1px solid #666;
+}*/
+
 #banner_button {
 	top: -538px;
 	left: 885px;

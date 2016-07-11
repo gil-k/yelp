@@ -6,11 +6,13 @@
     <div id="wrap">
         <div id="banner_visualYelp"></div>
         <div id="banner_findText"><b>Find</b></div>
-        <div id="banner_termInputField"><input type='text' id='term' class='cleardefault'  value='' ></div>
+        <div id="banner_termInputField"><input type='text' id='term' placeholder='' 
+                                               class='cleardefault' value='' ></div>
         <div id="banner_inputFieldDivider"></div>
         <div id="banner_nearText"><b>Near</b></div>
-        <div id="banner_locInputField"><input type='text' id='location' class='cleardefault' 
-                              value=''></div><!-- value='address, neighborhood, city, state or zip'></div> -->
+        <div id="banner_locInputField"><input type='text' id='location' placeholder='' 
+                                              class='cleardefault' value=''></div>
+                                              <!-- value='address, neighborhood, city, state or zip'></div> -->
                               
         <div id="banner_inputFieldEnd"></div>
         <div id="banner_button">
@@ -209,9 +211,11 @@ async>
 
         // $("#spinner_background").style.display = 'inline-block'; 
 
-        $.getJSON(url, function(data){
-            // $("#search_results").html(data);
-            coords = data['coords'];
+        $.ajax({
+          url: url,
+          dataType: 'json',
+          success: function( data ) {
+                        coords = data['coords'];
             lats = data['lats'];
             lngs = data['lngs'];
 
@@ -225,7 +229,29 @@ async>
             $loading_overlay.hide();
             $spinner.hide();
             $spinner_background.hide();
-          });
+          },
+          error: function( data ) {
+            alert( "ERROR:  " + data );
+          }
+        });
+
+        // $.getJSON(url, function(data){
+        //     // $("#search_results").html(data);
+        //     coords = data['coords'];
+        //     lats = data['lats'];
+        //     lngs = data['lngs'];
+
+            
+
+        //     $("#search_results").html(data['html']);
+
+        //     initMap(coords, lats, lngs);
+
+        //     // $("#spinner_background").style.display = 'none'; 
+        //     $loading_overlay.hide();
+        //     $spinner.hide();
+        //     $spinner_background.hide();
+        //   });
     }
 </script>
 

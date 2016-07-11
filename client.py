@@ -38,6 +38,9 @@ IS_PRODUCTION = (os.getenv('PYTHON_ENV', False) == "production")
 if not IS_PRODUCTION:
     app.debug = True
 
+def is_match(str1, str2):
+    return str1 in str2
+
 @app.route('/googlemap/')
 def googlemap():
     """ Home Page """
@@ -61,37 +64,27 @@ def yelp():
     a = time()
     # get client ip address
     client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
- 
-    # client_ip = '199.47.217.97' #Dropbox, SF
-    # client_ip = '147.126.10.148' # Chicago
+
+    url_for_geoloc = 'http://freegeoip.net/json/' + client_ip
+    query_resp = requests.get(url_for_geoloc)
+    geoloc_json = json.loads(query_resp.content)
+
+    zipcode = geoloc_json['zip_code']
+    city = geoloc_json['city']
+    region = geoloc_json['region_name'] or geoloc_json['region_code']
+    country = geoloc_json['country_name'] or geoloc_json['country_code']
+    default_loc = 'San Francisco, CA'
+
+    if city == "":
+        loc = default_loc
+    else:
+        if region == "":
+            loc = default_loc
+        else:
+            loc = ''.join([city, ', ', region , ', ', country]) 
 
 
-    # trial key to get geolocation based on ip, from Eurekapi.com
-    eurekapi_key = 'SAK54X6U927WR4TS7RWZ'
-
-    # get geolocation data from Eurekapi.com
-    response = requests.get('http://api.eurekapi.com/iplocation/v1.8/locateip?key=' + 
-        eurekapi_key + '&ip=' + client_ip + '&format=JSON&compact=Y')
-
-    # convert stringfied json to json object & extract desired details 
-    # like 'Los Angeles, California, United States'
-    data = json.loads(response.text)
-
-    query_status = data['query_status']['query_status_code']
-
-    # if invalid ip or loopback, use San Francisco as location
-    if re.match(query_status, 'OK') is None:
-        loc = 'San Francisco, CA'
-    else:    
-        geoloc = data['geolocation_data']
-        city = geoloc['city']
-        region_name = geoloc['region_name']
-        country_name = geoloc['country_name']
-
-        loc = ''.join([city + ', ' + region_name + ', ' + country_name])
-    
-    print str(time()-a)
-    # show yelp.html and pass the location data
+    print "location is %s" %loc
     return render_template('yelp.html', loc=loc)
 
     
