@@ -66,14 +66,26 @@ def yelp():
     client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
 
     url_for_geoloc = 'http://freegeoip.net/json/' + client_ip
-    query_resp = requests.get(url_for_geoloc)
-    geoloc_json = json.loads(query_resp.content)
+    default_loc = 'San Francisco, CA'
+    loc = ""
+
+    try:
+        query_resp = requests.get(url_for_geoloc, verify=False, timeout=3)
+        geoloc_json = json.loads(query_resp.content)
+    except requests.exceptions.RequestException as e:
+        loc = default_loc
+    
+
+    if loc == default_loc:
+        print "exception occurred"
+        return render_template('yelp.html', loc=loc)
+    
 
     zipcode = geoloc_json['zip_code']
     city = geoloc_json['city']
     region = geoloc_json['region_name'] or geoloc_json['region_code']
     country = geoloc_json['country_name'] or geoloc_json['country_code']
-    default_loc = 'San Francisco, CA'
+    
 
     if city == "":
         loc = default_loc
@@ -84,7 +96,6 @@ def yelp():
             loc = ''.join([city, ', ', region , ', ', country]) 
 
 
-    print "location is %s" %loc
     return render_template('yelp.html', loc=loc)
 
     

@@ -6,11 +6,11 @@
     <div id="wrap">
         <div id="banner_visualYelp"></div>
         <div id="banner_findText"><b>Find</b></div>
-        <div id="banner_termInputField"><input type='text' id='term' placeholder='' 
+        <div id="banner_termInputField"><input type='text' id='term' 
                                                class='cleardefault' value='' ></div>
         <div id="banner_inputFieldDivider"></div>
         <div id="banner_nearText"><b>Near</b></div>
-        <div id="banner_locInputField"><input type='text' id='location' placeholder='' 
+        <div id="banner_locInputField"><input type='text' id='location' 
                                               class='cleardefault' value=''></div>
                                               <!-- value='address, neighborhood, city, state or zip'></div> -->
                               
@@ -40,6 +40,9 @@
     <img id="spinner_background" src="/static/yelp_images/gray_rounded_square.png"></img>
     <img id="spinner" src="/static/yelp_images/warm_grey_spinner.gif" alt="loading..."></img>
 </div>
+
+<div id="error_yelp">Oops!  There was a problem accessing data from Yelp.  
+Please check your inputs and retry.</div>
 
 
 <!-- <br><br><br><br><br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{loc}} -->
@@ -110,7 +113,6 @@
     });
 </script>
 
-
 <script type="text/javascript">
   var map;
   function initMap(coords, lats, lngs, rank) {
@@ -167,6 +169,8 @@
   }    
 </script>
 
+<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?"></script>  -->
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap"
 async>
 </script>
@@ -205,6 +209,7 @@ async>
         var url = "/search/?term=" + term + "&location=" + location;
 
         window.scrollTo(0, 0);
+
         $loading_overlay.show();
         $spinner.show();
         $spinner_background.show();
@@ -215,11 +220,9 @@ async>
           url: url,
           dataType: 'json',
           success: function( data ) {
-                        coords = data['coords'];
+            coords = data['coords'];
             lats = data['lats'];
             lngs = data['lngs'];
-
-            
 
             $("#search_results").html(data['html']);
 
@@ -231,7 +234,13 @@ async>
             $spinner_background.hide();
           },
           error: function( data ) {
-            alert( "ERROR:  " + data );
+            $loading_overlay.hide();
+            $spinner.hide();
+            $spinner_background.hide();
+            // print "yelp exception"
+            // print data
+            text = 'Oops!  There was a problem accessing data from Yelp.  Please verify your inputs and retry.'
+            alert(text);
           }
         });
 
