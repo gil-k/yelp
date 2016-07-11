@@ -38,6 +38,12 @@ IS_PRODUCTION = (os.getenv('PYTHON_ENV', False) == "production")
 if not IS_PRODUCTION:
     app.debug = True
 
+@app.route('/googlemap/')
+def googlemap():
+    """ Home Page """
+    return render_template('googlemap.html')
+
+
 @app.route('/')
 def index():
     """ Home Page """

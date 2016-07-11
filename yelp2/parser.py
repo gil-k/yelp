@@ -6,13 +6,14 @@ from HTMLParser import HTMLParser
 
 class Parser(HTMLParser):
 
-    def __init__(self, photo_limit):
+    def __init__(self, photo_limit, rank):
         HTMLParser.__init__(self)
         self.photo_limit = photo_limit
         self.attrs_count = 0
         self.data = []
         self.src = ""
         self.business_photo_count = 0
+        self.rank = rank
 
     def handle_starttag(self, tag, attrs):
         if tag == 'img':
@@ -31,7 +32,9 @@ class Parser(HTMLParser):
             if self.business_photo_count < self.photo_limit and self.attrs_count == 2:
                 self.data.append(''.join(["<img src='https:", 
                                           self.src, 
-                                          "' width='226' height='226' />",
+                                          "' width='226' height='226' id='",
+                                          str(self.rank),
+                                          "' />",
                                           "&nbsp;"]))
                 self.business_photo_count += 1
  

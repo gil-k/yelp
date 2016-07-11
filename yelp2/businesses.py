@@ -117,9 +117,11 @@ class Businesses(object):
                                           self.get_buss_info(business), 
                                           "</span>"
                                           ]))
-                self.html.append(''.join(["<span class='photo_box'>",
+                self.html.append(''.join(["<span class='photo_box' id='row is ",
+                                          str(rank),
+                                          "' ",
                                           self.parse_photo_box_images(biz_photo_responses[rank], 
-                                          self.photo_limit),
+                                          self.photo_limit, rank),
                                           "</span>",
                                           "</div>"]))
 
@@ -155,20 +157,20 @@ class Businesses(object):
                               "' id='business_link' target='_blank'" ])
 
         name = ''.join(["&nbsp;<font size='3' color='696969'><b>", 
-                        business['name'], "</b>&nbsp;"])
+                        business['name'], "</b>"])
         # address = ', '.join(business['location']['display_address'])
 
         #rating  = ''.join(["<img src='", business['rating_img_url_large'],"' class='rotate270'/>"])
         # rating  = ''.join(["<img src='", business['rating_img_url_large'], "' width='133' height='24'/>"])
         # rating  = ''.join(["&nbsp;&nbsp;&nbsp;<img src='", business['rating_img_url_large'], "' width='66' height='12'/>"])
-        rating  = ''.join(["&nbsp;&nbsp;&nbsp;<img src='", 
+        rating  = ''.join(["<img src='", 
                            business['rating_img_url_large'], 
                            "' width='83' height='15'/>"])
         # rating  = ''.join(["&nbsp;<img src='", business['rating_img_url_small'], "'/>"])
         #rating  = ''.join(["<img src='", business['rating_img_url_large'], "' />"])
 
         # reviews  = ''.join([" (", str(business['review_count']), " reviews) "])
-        reviews  = ''.join(["&nbsp;",
+        reviews  = ''.join(["",
                             str(business['review_count']),
                             "&nbsp;reviews,&nbsp;"])
 
@@ -203,8 +205,8 @@ class Businesses(object):
         #                 "&nbsp; <font color='#666666'><b>", business['name'], "</b></font>",
         #                 " <font color='#666666'>", reviews, address, "</font>"])
 
-    def parse_photo_box_images(self, business_response, photo_limit):
-        parser = Parser(self.photo_limit)
+    def parse_photo_box_images(self, business_response, photo_limit, rank):
+        parser = Parser(self.photo_limit, rank)
         parser.feed(business_response.content.decode('utf-8'))
         html = ''.join(parser.data)
         parser.close()

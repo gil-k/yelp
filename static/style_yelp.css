@@ -11,6 +11,8 @@ body {
 		font-size:14px;
 		background-color: #ffffef;
 }
+a { color: inherit; }
+
 #top_banner {
 		background-image: url(/static/yelp_images/yelp_red_pixel.png);
 		top: 0;
@@ -147,15 +149,19 @@ body {
 }
 .outline {
 		color: black;
-		text-decoration: none;
+		/*text-decoration: none;*/
     text-shadow:
     -1px -1px #ffffff,
     1px -1px #ffffff,
     -1px 1px #ffffff,
     1px 1px #ffffff;  
 }
+
+.photo_box {
+	z-index: 1000;
+}
 #business_link {
-	text-decoration: none
+	/*text-decoration: none*/
 }
 
 #map {
