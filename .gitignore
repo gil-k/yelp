@@ -1,0 +1,7 @@
+build
+dist
+venv
+yelp.egg-info
+templates/test*.html
+**.DS_store
+

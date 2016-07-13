@@ -16,7 +16,8 @@
                             filename='js/jquery-1.12.4.min.js')}}" >
     </script>
 
-
+    <script type="text/javascript" src="/static/yelp_scripts.js" ></script>
+    
     <!-- for two input fields, clears default values & replaces default values if input fields are empty -->
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/util-functions.js')}}" >
@@ -25,10 +26,9 @@
             src="{{ url_for('static', filename='js/clear-default-text.js')}}" >
     </script>
 
-
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
             var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    </script>
+    </script> -->
 
 </head>
 

@@ -5,9 +5,9 @@
  * by Ross Shannon, http://www.yourhtmlsource.com/
  */
 
-addEvent(window, 'load', init, false);
+addEvent(window, 'load', initInputClearReplace, false);
 
-function init() {
+function initInputClearReplace() { 
     var formInputs = document.getElementsByTagName('input');
     for (var i = 0; i < formInputs.length; i++) {
         var theInput = formInputs[i];
@@ -25,7 +25,7 @@ function init() {
     }
 }
 
-function clearDefaultText(e) {
+function clearDefaultText(e) { 
     var target = window.event ? window.event.srcElement : e ? e.target : null;
     if (!target) return;
     
@@ -34,7 +34,7 @@ function clearDefaultText(e) {
     }
 }
 
-function replaceDefaultText(e) {
+function replaceDefaultText(e) { 
     var target = window.event ? window.event.srcElement : e ? e.target : null;
     if (!target) return;
     

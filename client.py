@@ -28,7 +28,7 @@ PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 
 BUSINESS_PATH = 'http://www.yelp.com/biz/'
 # Limit on number of businesses returned from the search
-SEARCH_LIMIT = 10
+SEARCH_LIMIT = 4
 # Limit on the number of biz-photo (photo box) images
 PHOTO_LIMIT = 20
 
@@ -38,13 +38,17 @@ IS_PRODUCTION = (os.getenv('PYTHON_ENV', False) == "production")
 if not IS_PRODUCTION:
     app.debug = True
 
-def is_match(str1, str2):
-    return str1 in str2
 
 @app.route('/googlemap/')
 def googlemap():
     """ Home Page """
     return render_template('googlemap.html')
+
+
+@app.route('/test2/')
+def test():
+    """ Home Page """
+    return render_template('test2.html')
 
 
 @app.route('/')

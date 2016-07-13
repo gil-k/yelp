@@ -1,6 +1,45 @@
-{% extends "master_yelp.html" %}
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <title>{% block title %}Visual Yelp{% endblock %}</title>
 
-{% block body %}
+    <link rel="icon" href="/static/yelp_images/yelp_favicon.ico">
+
+    <link type="text/css" rel="stylesheet"
+          href="{{ url_for('static',
+                            filename='style_yelp.css')}}" />
+                    
+    <script type="text/javascript"
+            src="{{ url_for('static',
+                            filename='js/jquery-1.12.4.min.js')}}" >
+    </script>
+
+    
+    
+    <!-- for two input fields, clears default values & replaces default values if input fields are empty -->
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/util-functions.js')}}" >
+    </script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/clear-default-text.js')}}" >
+    </script>
+
+    <script type="text/javascript" src="/static/js/yelp_scripts.js" ></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap" async></script>
+
+<!--     <script type="text/javascript">
+            var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script> -->
+
+</head>
+
+<body>
+<!-- {% extends "master_yelp.html" %}
+
+{% block body %} -->
 
 <footer id="top_banner">
     <div id="wrap">
@@ -45,54 +84,24 @@
 Please check your inputs and retry.</div>
 
 
-<!-- <br><br><br><br><br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{loc}} -->
-
 <script type="text/javascript">
-  function initInputFields(){
-    $el_term = document.getElementById('term');
-    if($el_term.value.trim() === ''){
-      $el_term.value = 'dinner';
-    }
 
-    $el_loc = document.getElementById('location');
-    if($el_loc.value.trim() === ''){
-      $el_loc.value = {{loc|tojson}};
-      if($el_loc.value.trim() === ''){
-        $el_loc.value = 'San Francisco, CA';
+    function initInputFields(){ 
+      $el_term = document.getElementById('term');
+      if($el_term.value.trim() === ''){
+        $el_term.value = 'dinner';
       }
-    }
-  }
-</script>
 
-
-<script type="text/javascript">
-    var $window = $(window),
-        $mapEl = $("#map"),
-        $bannerEl = $('#top_banner');
-        // $stickyBussInfo = $('#buss_info'),
-        // elTop = $mapEl.offset().top;
-
-    $window.scroll(function() {
-      // $mapEl.toggleClass('stickTop', $window.scrollTop() > elTop);
-      $mapEl.css({right: '0px', position: 'fixed'});
-      $bannerEl.toggleClass('stickTop', true);
-
-      //$stickyBussInfo.toggleClass('sticky', true);
-    });
-</script>
-
-
-<script type="text/javascript">
-  $("#term").keyup(function (e) {
-    if (e.keyCode == 13) {
-        searchYelp();
-    }
-  });
-  $("#location").keyup(function (e) {
-    if (e.keyCode == 13) {
-        searchYelp();
-    }
-  });
+      $el_loc = document.getElementById('location');
+      if($el_loc.value.trim() === ''){
+        $el_loc.value = {{loc|tojson}};
+        if($el_loc.value.trim() === ''){
+          $el_loc.value = 'San Francisco, CA';
+        }
+      }
+    };
+    initInputFields();
+    searchYelp();
 </script>
 
 
@@ -113,7 +122,36 @@ Please check your inputs and retry.</div>
     });
 </script>
 
-<script type="text/javascript">
+
+<!-- <script type="text/javascript">
+    var $window = $(window),
+        $mapEl = $("#map"),
+        $bannerEl = $('#top_banner');
+        // $stickyBussInfo = $('#buss_info'),
+        // elTop = $mapEl.offset().top;
+    $window.scroll(function() {
+      // $mapEl.toggleClass('stickTop', $window.scrollTop() > elTop);
+      $mapEl.css({right: '0px', position: 'fixed'});
+      $bannerEl.toggleClass('stickTop', true);
+      //$stickyBussInfo.toggleClass('sticky', true);
+    });
+</script> -->
+
+
+<!-- <script type="text/javascript">
+  $("#term").keyup(function (e) {
+    if (e.keyCode == 13) {
+        searchYelp();
+    }
+  });
+  $("#location").keyup(function (e) {
+    if (e.keyCode == 13) {
+        searchYelp();
+    }
+  });
+</script> -->
+
+<!-- <script type="text/javascript">
   var map;
   function initMap(coords, lats, lngs, rank) {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -167,14 +205,11 @@ Please check your inputs and retry.</div>
             });            
         }
   }    
-</script>
+</script> -->
 
-<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?"></script>  -->
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap"
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap"
 async>
-</script>
-
+</script> -->
 
 <!-- <script type="text/javascript">
   var map;
@@ -196,8 +231,7 @@ async>
 async>
 </script> -->
 
-
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     function searchYelp(){ 
 
         var $loading_overlay = $("#loading_overlay"),
@@ -262,19 +296,10 @@ async>
         //     $spinner_background.hide();
         //   });
     }
-</script>
-
-<script defer type="text/javascript">
-  initInputFields();
-  searchYelp();
-</script>
-
-{% endblock %}
+</script> -->
 
 
+<!-- {% endblock %} -->
 
-
-
-
-
-
+</body>
+</html>
