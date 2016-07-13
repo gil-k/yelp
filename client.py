@@ -28,7 +28,7 @@ PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 
 BUSINESS_PATH = 'http://www.yelp.com/biz/'
 # Limit on number of businesses returned from the search
-SEARCH_LIMIT = 4
+SEARCH_LIMIT = 9
 # Limit on the number of biz-photo (photo box) images
 PHOTO_LIMIT = 20
 

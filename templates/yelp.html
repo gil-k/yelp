@@ -30,6 +30,8 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap" async></script>
 
+    <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?"></script>  -->
+
 <!--     <script type="text/javascript">
             var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script> -->
@@ -105,22 +107,23 @@ Please check your inputs and retry.</div>
 </script>
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     var last_div = '';
-    $(document).on('mouseenter', 'img', function(e) {
-        curr_div = $(e.target).attr('id');
-        if(curr_div  != null){
-            if(last_div != curr_div){
-                last_div = curr_div;
-                // alert(curr_div);
-            }
-        }
+    $(document).on('mouseenter', '#buss_container', function(e) {
+        // alert("hi");
+        // curr_div = $(e.target).attr('id');
+        // if(curr_div  != null){
+        //     if(last_div != curr_div){
+        //         last_div = curr_div;
+        //         // alert(curr_div);
+        //     }
+        // }
         // if($(e.target).attr('class') == 'photo_box'){
         //     alert($(e.target).attr('id'));
         // }
         // console.log($(e.target).attr('class'));
     });
-</script>
+</script> -->
 
 
 <!-- <script type="text/javascript">
