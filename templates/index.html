@@ -2,6 +2,7 @@
 
 {% block body %}
 
+<!-- LANDING PAGE FOR ATITAN.NET -->
 <footer>
     <div id="wrap">
         <div id="banner"></div>
@@ -10,14 +11,18 @@
 
 <div id="main">
 
-		<div id="link1">
-				<em>{{page_id_1}}</em>
-		  	<!-- <a href={{page_url_1}} target="_blank"><em>{{page_id_1}}</em></a> -->
-		</div>
+	<!-- displays various links passed by client python program -->
 
-		<div id="link2">
-		  	<a href={{page_url_2}} target="_blank"><em>{{page_id_2}}</em></a>
-		</div>
+	<!-- link 1, link to "visual-yelp" currently hidden -->
+	<div id="link1">
+		<em>{{link_id_1}}</em>
+	  	<!-- <a href={{link_url_1}} target="_blank"><em>{{link_id_1}}</em></a> -->
+	</div>
+
+	<!-- link 2 -->
+	<div id="link2">
+	  	<a href={{link_url_2}} target="_blank"><em>{{link_id_2}}</em></a>
+	</div>
 
 </div>
 

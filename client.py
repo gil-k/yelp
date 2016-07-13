@@ -2,35 +2,31 @@
 from flask import Flask, jsonify, current_app, render_template, request
 
 import os
-import json
-import requests
-import re
+import json             # http query responses handled as json 
+                        # (in python requests/grequests and ajax calls)
+import requests         # for http get/post calls
 
-# Measure runtime intervals, remove when no longer needed
-from time import time
+from time import time   # to measure elapsed time for debugging purpose
 
-# Yelp's search url path
-from yelp.config import SEARCH_PATH
-# Yelp's API classes
-from yelp.oauth1_authenticator import Oauth1Authenticator
-from yelp.client import Client
 
-# yelp2 contains my helper classes
-# Extracts user's Yelp search url parameters
-from yelp2.url_params import Url_Params
-# Businesses object handles all biz photo (photo box) tasks
-from yelp2.businesses import Businesses
+''' 'yelp' module for Yelp API '''
+# from yelp.config import SEARCH_PATH     # search url per Yelp API
+# from yelp.oauth1_authenticator import Oauth1Authenticator     # Yelp authentication
+# from yelp.client import Client     # search ops performed via client obj
 
-# Credential for Yelp API
-CREDENTIAL_FILE = 'static/config_secret.json'
-# Url path for biz-photos (photo box) images
-PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 
-BUSINESS_PATH = 'http://www.yelp.com/biz/'
-# Limit on number of businesses returned from the search
-SEARCH_LIMIT = 9
-# Limit on the number of biz-photo (photo box) images
-PHOTO_LIMIT = 20
+''' 'yelp2' module is my contribution for extracting photos '''
+# (aka 'biz_photos') from businesses including helper classes
+from yelp2.url_params import Url_Params     # set up parameters to use Yelp search API
+# from yelp2.businesses import Businesses     # extracts business info and photos
+# from yelp2.config import CREDENTIAL_FILE    # credential for Yelp API
+# from yelp2.config import BUSINESS_PATH      # business page is ~ http://www.yelp.com/biz/"business-id"
+# from yelp2.config import PHOTO_BOX_PATH     # url path for business's photos, aka biz-photos
+# from yelp2.config import SEARCH_LIMIT       # maximum number of businesses displayed per page
+# from yelp2.config import PHOTO_LIMIT        # maximum number of biz-photos displayed per row
+# from yelp2.config import DEFAULT_TERM       # default term/category for yelp search query
+from yelp2.config import DEFAULT_LOCATION   # default location for yelp search query
+from yelp2.visual_client import Visual_Client
 
 app = Flask(__name__)
 
@@ -39,105 +35,155 @@ if not IS_PRODUCTION:
     app.debug = True
 
 
-@app.route('/googlemap/')
-def googlemap():
-    """ Home Page """
-    return render_template('googlemap.html')
 
 
-@app.route('/test2/')
-def test():
-    """ Home Page """
-    return render_template('test2.html')
-
-
+''' landing page for ATITAN.NET, personal page for Gil Kwak '''
 @app.route('/')
 def index():
-    """ Home Page """
-    return render_template('index.html', page_id_1='Visual Yelp', page_url_1='/yelp/',
-        page_id_2='LinkedIn', page_url_2='https://www.linkedin.com/in/gilkwak')
+    # displays following links:
+
+    link_id_1 = 'Visual Yelp'       # "visual-yelp page"
+    link_url_1 = '/yelp/'
+
+    
+    link_id_2 = 'LinkedIn Page'     # personal LinkedIn page"
+    link_url_2 = 'https://www.linkedin.com/in/gilkwak'
+
+    return render_template('index.html', 
+                            link_id_1=link_id_1, 
+                            link_url_1=link_url_1,
+                            link_id_2=link_id_2, 
+                            link_url_2=link_url_2)
 
 
+
+
+''' "visual" presentation of yelp search '''
 @app.route('/yelp/')
 def yelp():
-    """ Yelp 'visual' search page 
-        uses '/yelp/?term=category&location=city, state' to make yelp search request
-        displays results returned in div tag below the 'visual' search input fields
-        and the search button
-    """
-    a = time()
-    # get client ip address
+    # from businesses objects returned from '/yelp/?term=category&location=region'
+    # query, extracts biz-photos from businesses' photo-box page, and displays the 
+    # photos in a row per business, includes interactive google map.
+
+    # term/category & location obtained from two input fields.
+    # query results displayed in "search_results" div element
+
+    # visitor first sees yelp results with default term/category and
+    # ip-obtained geolocation or default location displayed on page
+
+    # browser ip used for obtain geolocation
     client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
 
-    url_for_geoloc = 'http://freegeoip.net/json/' + client_ip
-    default_loc = 'San Francisco, CA'
-    loc = ""
+    # util functions to generate search query parameters
+    util = Url_Params()
 
-    try:
-        query_resp = requests.get(url_for_geoloc, verify=False, timeout=3)
-        geoloc_json = json.loads(query_resp.content)
-    except requests.exceptions.RequestException as e:
-        loc = default_loc
+    # pass location info to yelp page
+    return render_template('yelp.html', loc=util.get_location(client_ip))
+
+
+    # # url for ip based geolocation query
+    # url_for_geoloc = 'http://freegeoip.net/json/' + client_ip
+    
+    # # init location variable
+    # loc = ""
+
+    # try:
+    #     # obtain ip based geolocation information
+    #     query_resp = requests.get(url_for_geoloc, verify=False, timeout=3)
+    #     # convert query response to json object
+    #     geoloc_json = json.loads(query_resp.content)
+    # except requests.exceptions.RequestException as e:
+    #     # if exception occurs or if times out after 3 seconds, default location used
+    #     print "exception-geolocation query"
+    #     loc = DEFAULT_LOCATION
+    
+    # # if exception occurred use default location
+    # if loc == DEFAULT_LOCATION:
+    #     return render_template('yelp.html', loc=loc)
     
 
-    if loc == default_loc:
-        print "exception occurred"
-        return render_template('yelp.html', loc=loc)
+
+    # # parse city, state, country or zipcode from json query response
+    # zipcode = geoloc_json['zip_code'] or ""
+    # city = geoloc_json['city'] or ""
+    # region = geoloc_json['region_name'] or geoloc_json['region_code'] or ""
+    # country = geoloc_json['country_name'] or geoloc_json['country_code'] or ""
     
+    # # format location depending on which geolocation data are defined
+    # if city == "":
+    #     loc = DEFAULT_LOCATION
+    # else:
+    #     if region == "":
+    #         loc = city
+    #     else:
+    #         if country == "":
+    #             loc = ''.join([city, ', ', region]) 
+    #         else:
+    #             loc = ''.join([city, ', ', region , ', ', country]) 
 
-    zipcode = geoloc_json['zip_code']
-    city = geoloc_json['city']
-    region = geoloc_json['region_name'] or geoloc_json['region_code']
-    country = geoloc_json['country_name'] or geoloc_json['country_code']
-    
-
-    if city == "":
-        loc = default_loc
-    else:
-        if region == "":
-            loc = default_loc
-        else:
-            loc = ''.join([city, ', ', region , ', ', country]) 
-
-
-    return render_template('yelp.html', loc=loc)
+    # # pass location info to yelp page
+    # return render_template('yelp.html', loc=loc)
 
     
 """ Displays results of Yelp http get request """
 @app.route("/search/", methods=["GET"])
 def main():
+    
+    a = time()     # to measure elapsed time
 
-    a = time()
+    # client for yelp query request & process response for 
+    # visual display of results (biz-photos for each businesses)
+    client = Visual_Client()
+    biz_photos = client.get_biz_photos()
 
-    # Load credential file
-    with open(CREDENTIAL_FILE) as credential_json:
-        credentials = json.load(credential_json)
+    print str(time()-a)     # to measure elapsed time
+
+    return biz_photos   # json containing html for biz-photos and
+                        # longitudes and latitudes of businesses for google map
+
+
+    # # Load YELP API credential file
+    # with open(CREDENTIAL_FILE) as credential_json:
+    #     credentials = json.load(credential_json)
 
     # Create credential object
-    auth = Oauth1Authenticator(**credentials)
+    # auth = Oauth1Authenticator(**credentials)
 
     # Create client object with credentials
-    client = Client(auth)
+    # client = Client(auth)
 
-    # Parses input fields for Yelp search url parameters
-    url_param_obj = Url_Params(request.args, SEARCH_LIMIT)
+    # # Parses input fields for Yelp search url parameters
+    # param = Url_Params()
 
-    # Get list of businesses for chosen categories and region
-    response = client._make_request(SEARCH_PATH, url_param_obj.get_url_params())
+    # # Get list of businesses for chosen categories and region
+    # response = client._make_request(SEARCH_PATH, param.get_url_params())#request.args))
 
-    # Obtain business info (name, rating, address, etc.) and
-    # urls for biz-photo (photo box) images for each businesses
-    buss_obj = Businesses(response, 
-                          BUSINESS_PATH,
-                          PHOTO_BOX_PATH, 
-                          SEARCH_LIMIT, 
-                          PHOTO_LIMIT)
+    # # Obtain business info (name, rating, address, etc.) and
+    # # urls for biz-photo (photo box) images for each businesses
+    # buss_obj = Businesses(response, 
+    #                       BUSINESS_PATH,
+    #                       PHOTO_BOX_PATH, 
+    #                       SEARCH_LIMIT, 
+    #                       PHOTO_LIMIT)
 
-    ret_val = buss_obj.get_biz_photos(response)
+    # ret_val = buss_obj.get_biz_photos(response)
 
-    print str(time()-a)
+    # print str(time()-a)
 
-    return ret_val
+    # return ret_val
+
+
+# test page for google map
+@app.route('/googlemap/')
+def googlemap():
+    return render_template('googlemap.html')
+
+
+# on-going test page
+@app.route('/test2/')
+def test():
+    return render_template('test2.html')
+
 
 if __name__ == "__main__":
     app.run(

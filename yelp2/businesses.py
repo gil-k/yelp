@@ -142,7 +142,8 @@ class Businesses(object):
         self.lat.append(avg_lat)
         self.lng.append(avg_lng)
 
-        ret_val = {u"html": ''.join(self.html),
+        ret_val = {u"status": 'ok',
+                    u"html": ''.join(self.html),
                    u"coords": rank+1,
                    u"lats": self.lat,
                    u"lngs": self.lng}

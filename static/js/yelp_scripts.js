@@ -25,7 +25,7 @@ $(document).ready(function() {
 
 
     $(document).on('mouseenter', '#buss_container', function(e) {
-        var index = $('#search_results #buss_container').index(this);
+        var index = $('#search_results #buss_container').index(this); 
         markers[index].setLabel( { text: (index+1).toString() , color: 'black', fontWeight : 'bold' ,} ) ;
         markers[index].setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
     });
@@ -47,7 +47,7 @@ var map;
 var markers = [];
 var mapOptions = {
     zoom: 11,
-    center: new google.maps.LatLng(32.77, -122),
+    // center: new google.maps.LatLng(32.77, -122),
     mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 
@@ -83,6 +83,7 @@ function initMap0() {
 // }
 
 function initMap(coords, lats, lngs, rank) {
+    markers = [];
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: lats[coords], lng: lngs[coords]},
         zoomControl: true,
@@ -183,14 +184,14 @@ function searchYelp(){
         url: url,
         dataType: 'json',
         success: function( data ) {
-            coords = data['coords'];
-            lats = data['lats'];
-            lngs = data['lngs'];
-
+            status = data['status'];
+            if(status == 'ok'){
+                coords = data['coords'];
+                lats = data['lats'];
+                lngs = data['lngs'];
+                initMap(coords, lats, lngs);
+            };
             $("#search_results").html(data['html']);
-
-            initMap(coords, lats, lngs);
-            // initMap();
 
             // $("#spinner_background").style.display = 'none'; 
             $loading_overlay.hide();

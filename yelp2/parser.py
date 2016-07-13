@@ -29,7 +29,7 @@ class Parser(HTMLParser):
                 if name == 'src':
                     self.src = value
 
-            if self.business_photo_count < self.photo_limit and self.attrs_count == 2:
+            if self.business_photo_count <= self.photo_limit and self.attrs_count == 2:
                 self.data.append(''.join(["<img src='https:", 
                                           self.src, 
                                           "' width='226' height='226' id='",
