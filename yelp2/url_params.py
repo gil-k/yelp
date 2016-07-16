@@ -21,62 +21,69 @@ from yelp2.config import CREDENTIAL_FILE    # credential for Yelp API
 class Url_Params(object):
 
     def __init__(self):
-        # self.request_args = request_args
-        self.url_params = {}#{LIMIT: SEARCH_LIMIT}
+        self.url_params = {LIMIT: SEARCH_LIMIT}
+        self.loc = ''
 
+    def get_url_params(self):
+        # if term/category & location query strings not in url, return None
+        try:
+            if TERM not in request.args or LOCATION not in request.args:
+                return None;
+            term = (request.args.get(TERM)).strip()
+            if not term:
+                return None;
+            location = (request.args.get(LOCATION)).strip()
+            if not location:
+                return None;
+        except Exception, e:
+            return None;
 
-    def get_url_params(self):#, request_args):
-        self.url_params.update({LIMIT: SEARCH_LIMIT})
-        if TERM in request.args:
-            term = request.args.get(TERM)
-            self.url_params.update({TERM: term.replace(' ', '+')})
+        # append term/category query string to parameter dict
+        self.url_params.update({TERM: term.replace(' ', '+')})
+        self.url_params.update({LOCATION: location.replace(' ', '+')})
 
-        if LOCATION in request.args:
-            term = request.args.get(LOCATION)
-            self.url_params.update({LOCATION: term.replace(' ', '+')})
-        else:
-            self.url_params.update({LOCATION: DEFAULT_LOCATION.replace(' ', '+')})
-
-        if SORT in request.args:
-            self.url_params.update({SORT: request.args.get(SORT)})
-
-        return self.url_params
-
-
+        # parse optional sort query string from url
+        try:
+            if SORT in request.args:
+                sort = (request.args.get(SORT)).strip()
+                if sort:
+                    self.url_params.update({SORT: request.args.get(SORT)})
+        except Exception, e:
+            self.url_params = None
+        finally:
+            return self.url_params
 
     def get_location(self, client_ip):
         # url for ip based geolocation query
         url_for_geoloc = 'http://freegeoip.net/json/' + client_ip
 
-        # init location variable
-        loc = ""
-
+        # obtain ip based geolocation information
         try:
-            # obtain ip based geolocation information
             query_resp = requests.get(url_for_geoloc, verify=False, timeout=3)
             # convert query response to json object
             geoloc_json = json.loads(query_resp.content)
-        except requests.exceptions.RequestException as e:
+        except Exception, e:
             # if exception occurs or if times out after 3 seconds, default location used
-            print "exception in url_params:get_location"
             return DEFAULT_LOCATION
         
         # parse city, state, country or zipcode from json query response
-        zipcode = geoloc_json['zip_code'] or ""
-        city = geoloc_json['city'] or ""
-        region = geoloc_json['region_name'] or geoloc_json['region_code'] or ""
-        country = geoloc_json['country_name'] or geoloc_json['country_code'] or ""
-        
+        try:
+            zipcode = geoloc_json['zip_code'] or ""
+            city = geoloc_json['city'] or ""
+            region = geoloc_json['region_name'] or geoloc_json['region_code'] or ""
+            country = geoloc_json['country_name'] or geoloc_json['country_code'] or ""
+        except Exception, e:
+            return DEFAULT_LOCATION
+
         # format location depending on which geolocation data are defined
         if city == "":
-            loc = DEFAULT_LOCATION
+            self.loc = DEFAULT_LOCATION
         else:
             if region == "":
-                loc = city
+                self.loc = city
             else:
                 if country == "":
-                    loc = ''.join([city, ', ', region]) 
+                    self.loc = ''.join([city, ', ', region]) 
                 else:
-                    loc = ''.join([city, ', ', region , ', ', country]) 
-
-        return loc
+                    self.loc = ''.join([city, ', ', region , ', ', country]) 
+        return self.loc

@@ -2,214 +2,241 @@
 import grequests
 import json
 
-# Extracts biz-photos (photo box) images which are 226x226 in elements with
-# class name of 'photo-box-img'
+'''  'yelp2' module is my contribution for extracting photos (biz-photos) '''
+
+# Given business 'id', parser scrapes photo-box page of each businesses, and
+# extracts 226x226 biz-photos in 'photo-box-img' tags, to be displayed
+# on a row per business.  Significantly faster than Beautiful Soup, etc.
 from yelp2.parser import Parser
 
-PIC_FILTER = '?tab=food'
+from yelp2.config import BUSINESS_PATH      # business page is ~ http://www.yelp.com/biz/"business-id"
+from yelp2.config import PHOTO_BOX_PATH     # url path for business's photos, aka biz-photos
+from yelp2.config import SEARCH_LIMIT       # maximum number of businesses displayed per page
+from yelp2.config import PHOTO_LIMIT        # maximum number of biz-photos displayed per row
+from yelp2.config import PIC_FILTER        # filter for biz_photos
 
+# Decorator for businesses json from Yelp search response 
 class Businesses(object):
 
-    def __init__(self, 
-                 response, 
-                 business_path,
-                 photo_box_path, 
-                 search_limit, 
-                 photo_limit):
-        # Response from Yelp search
+    def __init__(self, response):
+        # query response from Yelp search
         self.response = response
-        self.business_path = business_path
-        # Url for photo box images for each businesses
-        self.photo_box_path = photo_box_path
-        # Limit on number of businesses returned from the search
-        self.search_limit = search_limit
-        # Limit on the number of biz-photo (photo box) images
-        self.photo_limit = photo_limit
-        # List of businesses returned from Yelp search
+        # list of businesses from query response
         self.businesses = {}
-        # List of urls for photo box images for each businesses
-        self.photo_urls = []
-        # List of business info & photo box images to be displayed
+        # list of photo-box urls containing biz-photos for businesses
+        self.photo_box_urls = []
+        # list of business info (name, rating, address, etc.) and biz-photos
         self.html = []
-        # Latitude & longitude coordinate of businesses
+        # latitude & longitude coordinate of businesses
         self.lng = []
         self.lat = []
 
+    # returns business info (name, rating, address, etc.) and biz-photo images
+    # displayed per row per business, up to self.photo_limit images per business
+    def get_biz_photos(self):
+        # get list of businesses from Yelp query response
+        try:
+            self.businesses = self.response.get('businesses')
+        except Exception, e:
+            raise
 
-    # Return business info (name, rating, address, etc.) and phot box images,
-    # up to self.photo_limit, for each business returned from Yelp search
-    # def get_biz_photos0(self, response):
-    #     self.businesses = response.get('businesses')
+        # get urls for photo-box pages of businesses in order to extract biz-photos
+        try:
+            self.get_photo_urls();
+        except Exception, e:
+            raise
 
-    #     for rank in range(min(self.search_limit, len(self.businesses))):
-    #         business = self.businesses[rank]
-    #         print business['id']
-    #         if business:
-    #             self.photo_urls.append(''.join([self.photo_box_path, business['id']]))
+        # retrieve phot-box pages of all the businesses, using non-blocking call
+        try:
+            unsent_request = (grequests.get(url) for url in self.photo_box_urls)
+            photo_box_responses = grequests.map(unsent_request) 
+        except Exception, e:
+            raise
 
-    #     unsent_request = (grequests.get(url) for url in self.photo_urls)
-    #     biz_photo_responses = grequests.map(unsent_request) 
+        # get latitudes and longitudes of businesses, center is average of coordinates
+        try:
+            self.get_coordinates();
+        except Exception, e:
+            raise
 
-    #     self.html.append("<table style='background-color:#ffffcc' style='white-space:nowrap' cellpadding='5'>")
+        # scrap biz-photos from photo-box pages        
+        try:
+            rank = self.get_html(photo_box_responses);
+        except Exception, e:
+            raise
 
-    #     for rank in range(min(len(biz_photo_responses), len(self.businesses))):
-    #         business = self.businesses[rank]
-    #         if business:
-    #             self.html.append(''.join(["<tr><td>", 
-    #                                       self.get_buss_info(business), 
-    #                                       "</td></tr>"]))
-    #             self.html.append(''.join(["<tr><td id='photo_box_images'>",
-    #                                       self.parse_photo_box_images(biz_photo_responses[rank], self.photo_limit),
-    #                                       "</td></tr>"]))
+        # construct response json
+        ret_val = { u"status": 'ok',
+                    u"html": ''.join(self.html),
+                    u"coords": rank+1,
+                    u"lats": self.lat,
+                    u"lngs": self.lng}
+        try:
+            return json.dumps(ret_val)
+        except Exception, e:
+            raise
 
-    #     self.html.append("</table>")
-    #     return ''.join(self.html)
-
-    # Return business info (name, rating, address, etc.) and phot box images,
-    # up to self.photo_limit, for each business returned from Yelp search
-    def get_biz_photos(self, response):
-        self.businesses = response.get('businesses')
-
-        for rank in range(min(self.search_limit, len(self.businesses))):
+    def get_photo_urls(self):
+        # get biz-photos of businesses up to SEARCH_LIMIT businesses
+        for rank in range(min(SEARCH_LIMIT, len(self.businesses))):
             business = self.businesses[rank]
-            #print business['id']
             if business:
-                self.photo_urls.append(''.join([self.photo_box_path, 
-                                                business['id'],
-                                                PIC_FILTER]))
+                self.photo_box_urls.append(''.join([PHOTO_BOX_PATH, 
+                                                    business['id'],
+                                                    PIC_FILTER]))       
 
-        unsent_request = (grequests.get(url) for url in self.photo_urls)
-        biz_photo_responses = grequests.map(unsent_request) 
-
-        # self.html.append("<table style='background-color:#ffffcc' cellpadding='5'>")
+    # get latitudes and longitudes of businesses, center is average of coordinates
+    def get_coordinates(self):
         min_lat = 90;
         max_lat = -90;
         min_lng = 180;
         max_lng = -180;
 
-        for rank in range(min(len(biz_photo_responses), len(self.businesses))):
+        for rank in range(min(SEARCH_LIMIT, len(self.businesses))):
             business = self.businesses[rank]
             if business:
-                coord = business['location']['coordinate']
-                latitude = coord['latitude']
-                longitude = coord['longitude']
-                self.lat.append(latitude)
-                self.lng.append(longitude)
-                if latitude < min_lat:
-                    min_lat = latitude
-                if latitude > max_lat:
-                    max_lat = latitude
-                if longitude < min_lng:
-                    min_lng = longitude
-                if longitude > max_lng:
-                    max_lng = longitude
+                if 'location' in business:
+                    location = business['location']
+                    if 'coordinate' in location:
+                        coord = location['coordinate']
+                        if 'latitude' in coord and 'longitude' in coord:
+                            latitude = coord['latitude']
+                            longitude = coord['longitude']
+                            self.lat.append(latitude)
+                            self.lng.append(longitude)
+                            if latitude < min_lat:
+                                min_lat = latitude
+                            if latitude > max_lat:
+                                max_lat = latitude
+                            if longitude < min_lng:
+                                min_lng = longitude
+                            if longitude > max_lng:
+                                max_lng = longitude
+        
+        if rank >= 0:
+            avg_lat = (min_lat + max_lat) / 2
+            avg_lng = (min_lng + max_lng) / 2
+            self.lat.append(avg_lat)
+            self.lng.append(avg_lng)
 
-                # self.html.append(''.join(["<div id='business_info'>", 
-                #                           self.get_buss_info(business), 
-                #                           "</div>"]))
-                # self.html.append(''.join(["<div id='photo_box'>",
-                #                           self.parse_photo_box_images(biz_photo_responses[rank], 
-                #                           self.photo_limit),
-                #                           "</div>"]))
+    def get_html(self, photo_box_responses):
+        for rank in range(min(len(photo_box_responses), len(self.businesses))):
+            business = self.businesses[rank]
+            if business:
+                try:
+                    info = self.get_buss_info(business)
+                except Exception, e:
+                    raise
+
                 self.html.append(''.join(["<div id=buss_container>", 
-                                          "<span id='buss_info' class='outline'>", 
-                                          "&nbsp;<font size='3'><b>", str(rank+1), ".</b></font>&nbsp;",
-                                          self.get_buss_info(business), 
-                                          "</span>"
-                                          ]))
-                self.html.append(''.join(["<span class='photo_box' id='row is ",
-                                          str(rank),
-                                          "' ",
-                                          self.parse_photo_box_images(biz_photo_responses[rank], 
-                                          self.photo_limit, rank),
-                                          "</span>",
-                                          "</div>"]))
+                                          "<span id='buss_info'>", 
+                                          "&nbsp;&nbsp;<b>", 
+                                          str(rank+1), 
+                                          ".</b>&nbsp;",
+                                          info, 
+                                          "</span>"]))
+                try:
+                    biz_photos = self.parse_photo_box_images(photo_box_responses[rank], 
+                                                             PHOTO_LIMIT)
+                except Exception, e:
+                    raise
 
-                # self.html.append(''.join(["<div id=business_container>", 
-                #                           "<div id='business_info'>", 
-                #                           self.get_buss_info(business), 
-                #                           "</div>"
-                #                           ]))
-                # self.html.append(''.join(["<div id='photo_box'>",
-                #                           self.parse_photo_box_images(biz_photo_responses[rank], 
-                #                           self.photo_limit),
-                #                           "</div>",
-                #                           "</div>"]))
-
-        # self.html.append("</table>")
-        avg_lat = (min_lat + max_lat) / 2
-        avg_lng = (min_lng + max_lng) / 2
-        self.lat.append(avg_lat)
-        self.lng.append(avg_lng)
-
-        ret_val = {u"status": 'ok',
-                    u"html": ''.join(self.html),
-                   u"coords": rank+1,
-                   u"lats": self.lat,
-                   u"lngs": self.lng}
-        # return (''.join(self.html), self.latitude, self.longitude)
-        # return ''.join(self.html)
-        return json.dumps(ret_val)
+                self.html.append(''.join(["<span>",#" class='photo_box'",#" id='row is ",
+                                          # str(rank),
+                                          # "' ",
+                                          biz_photos,
+                                          # "</span>"]))
+                                          "</span></div>"]))
+        # return total count businesses
+        return rank
 
     def get_buss_info(self, business):
+        name = ''
+        rating  = ''
+        reviews = ''
+        address = ''
+        phone = ''
+
         link_start = ''.join(["<a href='", 
-                              self.business_path,
+                              BUSINESS_PATH,
                               business['id'],
-                              "' id='business_link' target='_blank'" ])
-
-        name = ''.join(["&nbsp;<font size='3' color='696969'><b>", 
-                        business['name'], "</b>"])
-        # address = ', '.join(business['location']['display_address'])
-
-        #rating  = ''.join(["<img src='", business['rating_img_url_large'],"' class='rotate270'/>"])
-        # rating  = ''.join(["<img src='", business['rating_img_url_large'], "' width='133' height='24'/>"])
-        # rating  = ''.join(["&nbsp;&nbsp;&nbsp;<img src='", business['rating_img_url_large'], "' width='66' height='12'/>"])
-        rating  = ''.join(["<img src='", 
-                           business['rating_img_url_large'], 
-                           "' width='83' height='15'/>"])
-        # rating  = ''.join(["&nbsp;<img src='", business['rating_img_url_small'], "'/>"])
-        #rating  = ''.join(["<img src='", business['rating_img_url_large'], "' />"])
-
-        # reviews  = ''.join([" (", str(business['review_count']), " reviews) "])
-        reviews  = ''.join(["",
-                            str(business['review_count']),
-                            "&nbsp;reviews,&nbsp;"])
-
-
-        str_address = ''.join(business['location']['address'])
-
-        address = ''.join(["&nbsp;",
-                            str_address,
-                            ",&nbsp;&nbsp;",
-                            business['location']['city'],
-                            "</font>"])
-
-                            # ", ", 
-                            # loc['neighborhoods'], 
-                            # ", ", 
-                            # loc['city']
-                            # ])
+                              # "'target='_blank'>"])
+                              " 'class='business_link' target='_blank' >" ])
         link_end = "</a>"
 
+        if 'name' in business:
+            name = ''.join(["<b>", 
+                            business['name'], 
+                            "</b>"])
+
+        if 'rating_img_url_large' in business:
+            # smaller image business['rating_img_url_small']
+            rating  = ''.join(["<img class='rating_img' src=' ", 
+                               business['rating_img_url_large'],
+                               # "' width='83' height='15'/>"])
+                               # "' width='111' height='20'/>"])
+                               "' width='166' height='30'/>"]) # native size
+
+        # review count
+        # reviews  = ''.join([" (", str(business['review_count']), " reviews) "])
+        if 'review_count' in business:
+            reviews  = ''.join([str(business['review_count']),
+                                "&nbsp;&nbsp;reviews"])
+
+        if 'location' in business:
+            location = business['location']
+            if 'address' in location:
+                str_address = ''.join(location['address'])
+            if 'city' in location:
+                city = location['city']
+
+            address = ''.join([",&nbsp;&nbsp;",
+                               str_address,
+                               ",&nbsp;&nbsp;",
+                               city])
+
+        if 'display_phone' in business:
+            phone = ''.join([",&nbsp;&nbsp;",
+                             business['display_phone']])
+
         # return ''.join([name, rating, reviews, address])
-        return ''.join([link_start, name, rating, reviews, address, link_end])
+        return ''.join(["&nbsp;", link_start, name, link_end, 
+                        "&nbsp;&nbsp;", 
+                        link_start, rating, link_end, 
+                        "&nbsp;&nbsp;", 
+                        link_start, reviews, address, phone, link_end])
 
-        # return ''.join([rating, 
-        #                 "&nbsp; <font size='4' color='#666666'>", 
-        #                 business['name'], 
-        #                 "</font>",
-        #                 " <font color='#666666'>", 
-        #                 reviews, address, 
-        #                 "</font>"])
+    # if insufficient biz-photos, fill with place holder images to fill a row
+    def add_placeholder(self, html):
+        # last two chars in html is number of biz photos
+        biz_photos = int(html[-2:])
+        new_html = []
+        # remove last two chars from biz photo html
+        new_html.append(html[:-2])
+        
+        # not enough biz-photos to fill a row, need PHOTO_LIMIT images
+        if biz_photos < PHOTO_LIMIT:
+            placeholder_img = "<img src='/static/yelp_images/placeholder.jpg' width='226' height='226'/>&nbsp;"
 
-        # return ''.join([rating, 
-        #                 "&nbsp; <font color='#666666'><b>", business['name'], "</b></font>",
-        #                 " <font color='#666666'>", reviews, address, "</font>"])
+            for rank in range(PHOTO_LIMIT - biz_photos):
+                new_html.append(placeholder_img)
 
-    def parse_photo_box_images(self, business_response, photo_limit, rank):
-        parser = Parser(self.photo_limit, rank)
-        parser.feed(business_response.content.decode('utf-8'))
-        html = ''.join(parser.data)
-        parser.close()
-        return html
+        return ''.join(new_html)
+
+    # scraps biz-photos from photo-box pages of each business
+    def parse_photo_box_images(self, business_response, photo_limit):
+        parser = Parser(PHOTO_LIMIT)
+        try:
+            parser.feed(business_response.content.decode('utf-8'))
+            html = ''.join(parser.data)
+        except Exception, e:
+            raise
+        finally:
+            parser.close()
+
+        # pad empty row with place holder
+        try:
+            return self.add_placeholder(html)
+        except Exception, e:
+            raise
 

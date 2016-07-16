@@ -6,19 +6,20 @@ from HTMLParser import HTMLParser
 
 class Parser(HTMLParser):
 
-    def __init__(self, photo_limit, rank):
+    def __init__(self, photo_limit):
         HTMLParser.__init__(self)
         self.photo_limit = photo_limit
         self.attrs_count = 0
         self.data = []
-        self.src = ""
         self.business_photo_count = 0
-        self.rank = rank
 
     def handle_starttag(self, tag, attrs):
+        # parse only img tags
         if tag == 'img':
             self.attrs_count = 0
 
+            # desired biz-photos are 226x226 and is photo-box-img class.
+            # if self.attrs_count is 2, then img tag contains a biz-photo
             for name, value in attrs:
                 if name == 'class' and value == 'photo-box-img':
                     self.attrs_count += 1
@@ -27,14 +28,22 @@ class Parser(HTMLParser):
                     self.attrs_count += 1
                     #print ''.join([name, " found ", str(self.attrs_count)])
                 if name == 'src':
-                    self.src = value
+                    src = value
 
-            if self.business_photo_count <= self.photo_limit and self.attrs_count == 2:
-                self.data.append(''.join(["<img src='https:", 
-                                          self.src, 
-                                          "' width='226' height='226' id='",
-                                          str(self.rank),
-                                          "' />",
-                                          "&nbsp;"]))
+            # append found biz-photo into parse data
+            if self.business_photo_count < self.photo_limit and self.attrs_count == 2:
+                self.data.append(''.join(["&nbsp;<img src='https:", 
+                                          src, 
+                                          "' width='226' height='226' />"]))
                 self.business_photo_count += 1
+
+    def handle_endtag(self, tag):
+        # append biz-photo count at end of html to return
+        if tag == 'body':
+            if self.business_photo_count < 10:
+                img_count = '0' + str(self.business_photo_count)
+            else:
+                img_count = str(self.business_photo_count)
+
+            self.data.append(''.join(["&nbsp;", img_count]))
  

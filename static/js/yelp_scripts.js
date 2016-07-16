@@ -38,11 +38,9 @@ $(document).ready(function() {
     });
 });
 
-function initGil(){
-    alert("Feel Confident, Gil!");
-};
 
-
+var default_term;
+var default_loc;
 var map;
 var markers = [];
 var mapOptions = {
@@ -51,6 +49,13 @@ var mapOptions = {
     mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 
+function initGil(){
+    alert("Feel Confident, Gil!");
+};
+function set_defaults(term, loc){
+    default_term = term;
+    default_loc = loc; 
+}
 function initMap0() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 37.785, lng: -122.4040},
@@ -163,13 +168,29 @@ function initMap(coords, lats, lngs, rank) {
     // }
 };  
 
+function initInputFields(){ 
+    $el_term = document.getElementById('term');
+    if($el_term.value.trim() === ''){
+        $el_term.value = default_term;
+    }
+    $el_loc = document.getElementById('location');
+    if($el_loc.value.trim() === ''){
+        $el_loc.value = default_loc;
+    }
+};
+
 function searchYelp(){ 
+    initInputFields();
+
     var $loading_overlay = $("#loading_overlay"),
         $spinner = $("#spinner"),
         $spinner_background = $("#spinner_background");
 
     var term = document.getElementById('term').value;
     var location = document.getElementById('location').value;
+    term = term.trim();
+    location = location.trim();
+
     var url = "/search/?term=" + term + "&location=" + location;
 
     window.scrollTo(0, 0);
@@ -191,9 +212,9 @@ function searchYelp(){
                 lngs = data['lngs'];
                 initMap(coords, lats, lngs);
             };
+
             $("#search_results").html(data['html']);
 
-            // $("#spinner_background").style.display = 'none'; 
             $loading_overlay.hide();
             $spinner.hide();
             $spinner_background.hide();
@@ -202,13 +223,10 @@ function searchYelp(){
             $loading_overlay.hide();
             $spinner.hide();
             $spinner_background.hide();
-            // print "yelp exception"
-            // print data
-            text = 'Oops!  There was a problem accessing data from Yelp.  Please verify your inputs and retry.'
-            alert(text);
+            response = json.loads(data);
+            alert('Oops! Something went wrong.  Please retry.');
         }
-    });
-
+    });        
     // $.getJSON(url, function(data){
     //     // $("#search_results").html(data);
     //     coords = data['coords'];

@@ -26,9 +26,7 @@
 
     <script type="text/javascript" src="/static/js/yelp_scripts.js" ></script>
 
-<!--     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap" async></script> -->
-
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?"></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa9A9YFxUIB66O_f65QncKK_m2aTWwvUk&callback=initMap" async></script>
 
 <!--     <script type="text/javascript">
             var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -66,9 +64,7 @@
 
 <div id="map"></div>
 
-<div id="results">
-  <div id="search_results"></div>
-</div>
+<div id="search_results"></div>
 
 <div id="loading_overlay"></div>
 
@@ -81,26 +77,18 @@
 Please check your inputs and retry.</div>
 
 
+
 <script type="text/javascript">
-
-    function initInputFields(){ 
-      $el_term = document.getElementById('term');
-      if($el_term.value.trim() === ''){
-        $el_term.value = 'dinner';
-      }
-
-      $el_loc = document.getElementById('location');
-      if($el_loc.value.trim() === ''){
-        $el_loc.value = {{loc|tojson}};
-        if($el_loc.value.trim() === ''){
-          $el_loc.value = 'San Francisco, CA';
-        }
-      }
-    };
-    initInputFields();
+    // save default location to javascript cache
+    set_defaults( {{term|tojson}}, {{loc|tojson}} );
+    
+    // display search results using default term/category
+    // and ip-based geolocation 
     searchYelp();
 </script>
 
+</body>
+</html>
 
 <!-- <script type="text/javascript">
     var last_div = '';
@@ -279,7 +267,7 @@ async>
         // $.getJSON(url, function(data){
         //     // $("#search_results").html(data);
         //     coords = data['coords'];
-        //     lats = data['lats'];
+        //     lats = data['lats']
         //     lngs = data['lngs'];
 
             
@@ -296,5 +284,4 @@ async>
     }
 </script> -->
 
-</body>
-</html>
+
