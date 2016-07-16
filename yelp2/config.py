@@ -12,15 +12,15 @@ PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 # maximum number of businesses displayed per page
 # currently set to 9 total until google map marker label can display 
 # more than 1 character
-SEARCH_LIMIT = 5
+SEARCH_LIMIT = 9
 # maximum number of biz-photos found in "photo-box" of a business
 # displayed in a single row, on page
-PHOTO_LIMIT = 6
+PHOTO_LIMIT = 20
 # term/category for yelp search query in case term input field is empty
-DEFAULT_TERM = 'eraser'
+DEFAULT_TERM = 'dinner'
 # location used in yelp search query in case location input field is empty
 # or unable to obtain geolocation from ip during first page visit
-DEFAULT_LOCATION = 'Creston, IL'
+DEFAULT_LOCATION = 'San Francisco, CA'
 # sorting method of results, 0=default, 1=distance, 2=highest rated
 DEFAULT_SORT = 0
 

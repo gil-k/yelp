@@ -1,36 +1,34 @@
 $(document).ready(function() {
+    // keeps banner at the top, and google map at top-right
     var $window = $(window),
         $mapEl = $("#map"),
         $bannerEl = $('#top_banner');
-        // $stickyBussInfo = $('#buss_info'),
-        // elTop = $mapEl.offset().top;
     $window.scroll(function() {
-      // $mapEl.toggleClass('stickTop', $window.scrollTop() > elTop);
       $mapEl.css({right: '0px', position: 'fixed'});
       $bannerEl.toggleClass('stickTop', true);
-      //$stickyBussInfo.toggleClass('sticky', true);
     });
 
-
+    // after entry in term/category search input field, pressing ENTER starts Yelp search
     $("#term").keyup(function (e) {
         if (e.keyCode == 13) {
             searchYelp();
         }
     });
+    // after entry in location search input field, pressing ENTER starts Yelp search
     $("#location").keyup(function (e) {
         if (e.keyCode == 13) {
             searchYelp();
         }
     });
 
-
+    // mouse hovering over biz-photos highlights corresponding google map marker
     $(document).on('mouseenter', '#buss_container', function(e) {
         var index = $('#search_results #buss_container').index(this); 
         markers[index].setLabel( { text: (index+1).toString() , color: 'black', fontWeight : 'bold' ,} ) ;
         markers[index].setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
     });
 
-    // 
+    // mouse leaving a row of biz-photos returns the corresponding google map marker to normal state
     $(document).on('mouseleave', '#buss_container', function(e) {
         var index = $('#search_results #buss_container').index(this);
         markers[index].setLabel( { text: (index+1).toString() , color: 'white'} ) ;
@@ -38,55 +36,22 @@ $(document).ready(function() {
     });
 });
 
-
+// default term/category query string for Yelp API
 var default_term;
+// default location query string for Yelp API
 var default_loc;
+// Google map with markers of businesses displayed on page
 var map;
+// list of Google map markers for businesses displayed on page
 var markers = [];
-var mapOptions = {
-    zoom: 11,
-    // center: new google.maps.LatLng(32.77, -122),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-};
 
-function initGil(){
-    alert("Feel Confident, Gil!");
-};
+// default term/category & location Yelp API query strings for search
 function set_defaults(term, loc){
     default_term = term;
     default_loc = loc; 
 }
-function initMap0() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 37.785, lng: -122.4040},
-        zoomControl: true,
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: false,
-        zoom: 11
-    });
-    // map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    // for (var i=0; i<markerData.length; i++) {
-    //     markers.push(
-    //         new google.maps.Marker({
-    //             position: new google.maps.LatLng(markerData[i].lat, markerData[i].lng),
-    //             // title: markerData[i].title,
-    //             map: map,
-    //             // icon: normalIcon()
-    //         })
-    //     );
-    // }
-};
 
- 
-// function highlightMarker() {
-//   return {
-//     // url: 'http://steeplemedia.com/images/markers/markerGreen.png'
-//   };
-// }
-
+// location map with business markers
 function initMap(coords, lats, lngs, rank) {
     markers = [];
     map = new google.maps.Map(document.getElementById('map'), {
@@ -100,6 +65,7 @@ function initMap(coords, lats, lngs, rank) {
         zoom: 11
     });
 
+    // keep markers in an array, so they can be retrieved later for highlighting
     for (var i=0; i<coords; i++) {
         markers.push(
           new google.maps.Marker({
@@ -112,62 +78,9 @@ function initMap(coords, lats, lngs, rank) {
           })
         );
     }
-
-    // var marker;
-    // for (var i=0; i < (coords); i++){ 
-    //     marker = new google.maps.Marker({
-    //         position: {lat: lats[i], lng: lngs[i]},
-    //         label: {
-    //                 text: (i+1).toString(), 
-    //                 color: 'white'
-    //                 },
-    //         title: '',
-    //         icon: '',
-    //         map: map
-    //     })      
-    // };
-
-    // var marker;
-    // if(rank == null){
-    //     for (var i=0; i < (coords); i++){ 
-    //         marker = new google.maps.Marker({
-    //             position: {lat: lats[i], lng: lngs[i]},
-    //             label: {
-    //                     text: (i+1).toString(), 
-    //                     color: 'white'
-    //                     },
-    //             map: map
-    //         });        
-    //     };
-    // } else {
-    //     var hovered_buss = parseInt(rank); 
-    //     for (var i=0; i < (coords); i++){ 
-    //         if(hovered_buss != i){
-    //             marker = new google.maps.Marker({
-    //                 position: {lat: lats[i], lng: lngs[i]},
-    //                 label: {
-    //                         text: (i+1).toString(), 
-    //                         color: 'white'
-    //                         },
-    //                 map: map
-    //             });
-    //         } else {
-    //             // alert(hovered_buss);
-    //         }
-    //     };
-            
-    //     marker = new google.maps.Marker({
-    //         position: {lat: lats[hovered_buss], lng: lngs[hovered_buss]},
-    //         label: {
-    //                 text: (i+1).toString(), 
-    //                 color: 'black'
-    //                 },
-    //         zIndex: google.maps.Marker.MAX_ZINDEX + 1,
-    //         map: map
-    //     });            
-    // }
 };  
 
+// if input field is empty, populate with default values
 function initInputFields(){ 
     $el_term = document.getElementById('term');
     if($el_term.value.trim() === ''){
@@ -179,12 +92,31 @@ function initInputFields(){
     }
 };
 
-function searchYelp(){ 
-    initInputFields();
-
+// animation while waiting for response and display of biz-photos
+function loading_anim(bool){
     var $loading_overlay = $("#loading_overlay"),
         $spinner = $("#spinner"),
         $spinner_background = $("#spinner_background");
+
+    if (bool){
+        $loading_overlay.show();
+        $spinner.show();
+        $spinner_background.show();
+    } else {
+        $loading_overlay.hide();
+        $spinner.hide();
+        $spinner_background.hide();       
+    }
+}
+
+// do Yelp search and display biz-photos of businesses
+function searchYelp(){ 
+    // if input field is empty, populate with default values
+    initInputFields();
+
+    var $loading_overlay = $("#loading_overlay");
+    var $spinner = $("#spinner");
+    var $spinner_background = $("#spinner_background");
 
     var term = document.getElementById('term').value;
     var location = document.getElementById('location').value;
@@ -195,12 +127,10 @@ function searchYelp(){
 
     window.scrollTo(0, 0);
 
-    $loading_overlay.show();
-    $spinner.show();
-    $spinner_background.show();
+    // animation during request & processing of query response
+    loading_anim(true);
 
-    // $("#spinner_background").style.display = 'inline-block'; 
-
+    // 'search' endpoint for Yelp search API
     $.ajax({
         url: url,
         dataType: 'json',
@@ -213,35 +143,16 @@ function searchYelp(){
                 initMap(coords, lats, lngs);
             };
 
+            // displays business info & biz-photos per row within search_results div
             $("#search_results").html(data['html']);
 
-            $loading_overlay.hide();
-            $spinner.hide();
-            $spinner_background.hide();
+            // stop animation
+            loading_anim(false);
         },
         error: function( data ) {
-            $loading_overlay.hide();
-            $spinner.hide();
-            $spinner_background.hide();
-            response = json.loads(data);
+            // stop animation
+            loading_anim(false);
             alert('Oops! Something went wrong.  Please retry.');
         }
     });        
-    // $.getJSON(url, function(data){
-    //     // $("#search_results").html(data);
-    //     coords = data['coords'];
-    //     lats = data['lats'];
-    //     lngs = data['lngs'];
-
-        
-
-    //     $("#search_results").html(data['html']);
-
-    //     initMap(coords, lats, lngs);
-
-    //     // $("#spinner_background").style.display = 'none'; 
-    //     $loading_overlay.hide();
-    //     $spinner.hide();
-    //     $spinner_background.hide();
-    //   });
 };

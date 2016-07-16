@@ -180,8 +180,9 @@ class Businesses(object):
         # review count
         # reviews  = ''.join([" (", str(business['review_count']), " reviews) "])
         if 'review_count' in business:
-            reviews  = ''.join([str(business['review_count']),
-                                "&nbsp;&nbsp;reviews"])
+            reviews  = ''.join(["(",
+                                str(business['review_count']),
+                                "&nbsp;reviews)"])
 
         if 'location' in business:
             location = business['location']
@@ -190,7 +191,7 @@ class Businesses(object):
             if 'city' in location:
                 city = location['city']
 
-            address = ''.join([",&nbsp;&nbsp;",
+            address = ''.join(["&nbsp;&nbsp;",
                                str_address,
                                ",&nbsp;&nbsp;",
                                city])
@@ -200,11 +201,16 @@ class Businesses(object):
                              business['display_phone']])
 
         # return ''.join([name, rating, reviews, address])
-        return ''.join(["&nbsp;", link_start, name, link_end, 
-                        "&nbsp;&nbsp;", 
-                        link_start, rating, link_end, 
-                        "&nbsp;&nbsp;", 
-                        link_start, reviews, address, phone, link_end])
+        # return ''.join(["&nbsp;", link_start, name, link_end, 
+        #                 "&nbsp;&nbsp;", 
+        #                 link_start, rating, link_end, 
+        #                 "&nbsp;&nbsp;", 
+        #                 link_start, reviews, address, phone, link_end])
+        return ''.join(["&nbsp;", link_start, rating, link_end, 
+                "&nbsp;&nbsp;", 
+                link_start, name, link_end, 
+                "&nbsp;&nbsp;", 
+                link_start, reviews, address, phone, link_end])
 
     # if insufficient biz-photos, fill with place holder images to fill a row
     def add_placeholder(self, html):
