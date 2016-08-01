@@ -24,12 +24,18 @@ footer {
 }
 
 #main {
-	top: 150px;
-	left: 50px;
+	top: 100px;
+	margin: auto;
 	position: relative; 
 }
 
-#link1 {
+#title {
+	top: 10px;
+	text-align: center;
+	position: relative;
+}
+#links{
+	top: 30px;
 	position: relative; 
 }
 
