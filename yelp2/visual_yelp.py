@@ -1,5 +1,5 @@
-# -*- coding: UTF-8 -*-
-
+import os
+import sys
 import json
 
 '''  'yelp' module for Yelp API '''
@@ -27,7 +27,8 @@ class Visual_Yelp(object):
     # load Yelp API credential json file
     def get_credentials(self):
         try:
-            with open(CREDENTIAL_FILE) as credential_json:
+            filepath = sys.prefix + '/../' + CREDENTIAL_FILE 
+            with open(filepath) as credential_json:
                 credentials = json.load(credential_json)
         except Exception, e:
             credentials = None

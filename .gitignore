@@ -9,3 +9,4 @@ templates/master_yelp.html
 templates/test*
 templates/*title*
 **.pyc
+**.swp

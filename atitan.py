@@ -2,6 +2,7 @@
 from flask import Flask, jsonify, current_app, render_template, request
 
 import os
+import sys
 import json             # http query responses handled as json 
                         # (in python requests/grequests and ajax calls)
 import requests         # for http get/post calls
@@ -24,7 +25,10 @@ if not IS_PRODUCTION:
 ''' landing page for ATITAN.NET '''
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if hasattr(sys, 'real_prefix'):
+        return render_template('index.html')
+    else:
+        return "no virtual environment found"
 
     # # displays following links:
     # link_id_1 = 'VisualYelp'       # "visual-yelp page"
@@ -53,8 +57,7 @@ def yelp():
 
     # visitor first sees yelp results with default term/category and
     # ip-obtained geolocation displayed on page
-
-
+    
     # browser ip used to obtain geolocation
     client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
 
