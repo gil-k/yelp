@@ -32,7 +32,6 @@ class Parser(HTMLParser):
 
             # append found biz-photo into parse data
             if self.business_photo_count < self.photo_limit and self.attrs_count == 2:
-                print ''.join(["hello:", src])
                 self.data.append(''.join(["&nbsp;<img src='", 
                                           src, 
                                           "' width='226' height='226' />"]))
