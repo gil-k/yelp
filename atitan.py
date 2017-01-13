@@ -25,22 +25,22 @@ if not IS_PRODUCTION:
 ''' landing page for ATITAN.NET '''
 @app.route('/')
 def index():
-    if hasattr(sys, 'real_prefix'):
-        return render_template('index.html')
-    else:
-        return "no virtual environment found"
+    #if hasattr(sys, 'real_prefix'):
+    #    return render_template('index.html')
+    #else:
+    #    return "no virtual environment found"
 
-    # # displays following links:
-    # link_id_1 = 'VisualYelp'       # "visual-yelp page"
-    # link_url_1 = '/yelp/'
-    # link_id_2 = 'LinkedIn age'     # personal LinkedIn page"
-    # link_url_2 = 'https://www.linkedin.com/in/gilkwak'
+     # displays following links:
+     link_id_1 = 'YelpPhotos'       # "visual-yelp page"
+     link_url_1 = '/yelp/'
+     link_id_2 = 'LinkedIn'     # personal LinkedIn page"
+     link_url_2 = 'https://www.linkedin.com/in/gilkwak'
 
-    # return render_template('index.html', 
-    #                         link_id_1=link_id_1, 
-    #                         link_url_1=link_url_1,
-    #                         link_id_2=link_id_2, 
-    #                         link_url_2=link_url_2)
+     return render_template('index.html', 
+                             link_id_1=link_id_1, 
+                             link_url_1=link_url_1,
+                             link_id_2=link_id_2, 
+                             link_url_2=link_url_2)
 
 
 ''' "visual" presentation of yelp search results '''

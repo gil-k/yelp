@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 cd /home/ubuntu/atitan
-virtualenv venv
-. venv/bin/activate
+virtualenv BASELINE
+. BASELINE/bin/activate
 pip install Flask
-python index.py
+python atitan.py
