@@ -10,3 +10,4 @@ templates/test*
 templates/*title*
 **.pyc
 **.swp
+parser.log

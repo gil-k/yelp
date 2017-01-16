@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
+import logging
 
 from HTMLParser import HTMLParser
 
-# from yelp2.config2 import PHOTO_LIMIT
+#from yelp2.config2 import PHOTO_LIMIT
 
 class Parser(HTMLParser):
 
@@ -32,6 +33,9 @@ class Parser(HTMLParser):
 
             # append found biz-photo into parse data
             if self.business_photo_count < self.photo_limit and self.attrs_count == 2:
+                logging.basicConfig(filename='example.log', level=logging.DEBUG)
+                logging.debug(src)
+
                 self.data.append(''.join(["&nbsp;<img src='", 
                                           src, 
                                           "' width='226' height='226' />"]))
