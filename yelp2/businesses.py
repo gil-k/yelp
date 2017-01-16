@@ -221,7 +221,7 @@ class Businesses(object):
         new_html.append(html[:-2])
         
         # not enough biz-photos to fill a row, need PHOTO_LIMIT images
-        if biz_photos < PHOTO_LIMIT:
+        if biz_photos <  PHOTO_LIMIT:
             placeholder_img = "<img src='/static/yelp_images/placeholder.jpg' width='226' height='226'/>&nbsp;"
 
             for rank in range(PHOTO_LIMIT - biz_photos):

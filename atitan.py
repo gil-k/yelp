@@ -44,7 +44,7 @@ def index():
 
 
 ''' "visual" presentation of yelp search results '''
-@app.route('/yelp/')
+@app.route('/notreadyyelp/')
 def yelp():
     # business photos (biz-photos) are extracted from yelp search results, 
     # and displayed one business per row. 
@@ -100,10 +100,15 @@ def test():
 
 
 if __name__ == "__main__":
-    if not app.debug:
-        app.run(
-            host=os.getenv('IP', '0.0.0.0'),
-            port=int(os.getenv('PORT', '8080'))
-        )
-    else:
-        app.run()
+    app.run(
+        host=os.getenv('IP', '0.0.0.0'),
+        port=int(os.getenv('PORT', '8080'))
+    )
+#    if app.debug:
+#        app.run(
+#            host=os.getenv('IP', '0.0.0.0'),
+#            port=int(os.getenv('PORT', '8080'))
+#        )
+#    else:
+#        app.run()
+
