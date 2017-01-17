@@ -4,13 +4,13 @@ from setuptools import setup
 setup(
     name='yelp',
 
-    version='1.0.1',
+    version='1.2',
 
-    description='yelp search results returned as image gallery',
+    description='Yelp search results displayed with gallery of user photos of businesses',
 
     url='',
 
-    author='Gil D. Kwak',
+    author='K.D. Kwak',
     author_email='gil@atitan.net',
 
     classifiers=[
@@ -22,7 +22,7 @@ setup(
 
     keywords='yelp',
 
-    packages=find_packages(exclude=('venv*',)),
+    packages=find_packages(exclude=('BASELINE*',)),
 
     install_requires=[
         'httplib2',
