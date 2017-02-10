@@ -1,6 +1,8 @@
 body {
 	font-family: Helvetica Neue, Helvetica, Arial, Sans-Serif;
-	font-size:14px;
+	/*font-size:14px;*/
+	font-size: large;
+	color: #808080;
 	background-color: #ffffff;
 }
 footer {
@@ -29,17 +31,48 @@ footer {
 	position: relative; 
 }
 
-#title {
-	top: 10px;
+.centered {
+	top: 50px;
 	text-align: center;
+	margin: 0 auto;
 	position: relative;
 }
-#links{
-	top: 30px;
-	position: relative; 
+
+#title {
+	top: 50px;
+	/*text-align: left;*/
+	position: relative;
 }
 
-#link2 {
-	top: 30px;
-    position: relative; 
+.textbox {
+	border: 1px solid silver;
+	border-radius: 5px;
+}
+
+#link {
+/*	top: 50px;
+	text-align: center;
+	position: relative;*/
+	height: 50px;	
+}
+
+.texter {
+	display: none;
+	border-left: white 30px soid;
+}
+
+a:link {
+	color: #808080;
+	text-decoration: none;
+}
+a:visited {
+	color: #808080;
+	text-decoration: none;
+}
+a:active {
+	color: #808080;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
 }

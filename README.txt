@@ -1,6 +1,11 @@
-Visual presentation of Yelp search results.
-Displays biz-photos, user uploaded photos, on a row per business,
-in addition to business and review information.
+Visual Yelp
 
-Uses grequests for unblocked http calls, and Parser for faster
-page scraping.
+Yelp search results displayed as gallery of user photos,
+each row representing a business.
+
+Number of photos for each business, and number of
+businesses per page, and type of photos are some
+parameters which can be set.
+
+Implemented in Python with Flask, using non-blocking
+API requests and web scraping of Yelp user photos.

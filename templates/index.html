@@ -10,26 +10,43 @@
 </footer> 
 
 <div id="main">
-	<div id="title"><em><p>
-<font color="#CCCCCC">
+	<div class="centered">
+<!-- <font color="#000000">
 						<p>
 						<p>Yelp Photos
 						<p>
 						<p>Coding Exercises
 						<p>
 						<p>LinkedIn</em></div>
-</font>
-<!-- displays various links passed by client python program -->
-	<!-- link 1, link to "visual-yelp" -->
-<!-- 	<div id="link1">
-		<em>{{link_id_1}}</em>
-	  	<a href={{link_url_1}} target="_blank"><em>{{link_id_1}}</em></a>
-	</div>
--->
-	<!-- link 2 -->
-<!-- 	<div id="link2">
-	  	<a href={{link_url_2}} target="_blank"><em>{{link_id_2}}</em></a>
-	</div>-->
-</div>
+</font> -->
 
+	<!-- displays various links passed by client python program -->
+		
+	 	<div id="link">
+	 		<p><p>
+			<div class="textbox">
+			<img src="static/yelpLogo.png" style="vertical-align:middle" alt="Yelp" width="24" height="28">&nbsp;&nbsp;&nbsp;
+		  		<a href={{link_url_1}}>{{link_id_1}}</a>
+		  	</div>
+		</div>
+		
+	 	<div id="link">
+	 		<p><p>
+	 		<div class="textbox">
+		  		<img src="/static/linkedinLogo.png" style="vertical-align:middle" alt="LinkedIn page" width="37" height="28">&nbsp;&nbsp;&nbsp;
+		  		<a href={{link_url_2}}>{{link_id_2}}</a>
+		  	</div>
+		</div>
+
+	 	<div id="link">
+	 		<p><p>
+	 		<div class="textbox">
+	 		<img src="static/bitbucket.png" style="vertical-align:middle" alt="Bitbucket" width="28" height="28">&nbsp;&nbsp;&nbsp;
+		  		<a href={{link_url_3}}>{{link_id_3}}</a>
+		  	</div>
+		</div>
+
+	</div>
+
+</div>
 {% endblock %}

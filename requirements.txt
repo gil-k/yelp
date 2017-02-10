@@ -1,4 +1,14 @@
+click==6.7
 Flask==0.12
+gevent==1.2.1
+greenlet==0.4.11
 grequests==0.3.0
-requests==2.12.4
-
+httplib2==0.9.2
+itsdangerous==0.24
+Jinja2==2.9.4
+MarkupSafe==0.23
+oauth2==1.9.0.post1
+requests==2.12.5
+six==1.10.0
+Werkzeug==0.11.15
+YelpPhotos==1.2

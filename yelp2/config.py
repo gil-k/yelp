@@ -12,10 +12,10 @@ PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 # maximum number of businesses displayed per page
 # currently set to 9 total until google map marker label can display 
 # more than 1 character
-SEARCH_LIMIT = 10
+SEARCH_LIMIT = 3
 # maximum number of biz-photos found in "photo-box" of a business
 # displayed in a single row, on page
-PHOTO_LIMIT = 10
+PHOTO_LIMIT = 3
 # term/category for yelp search query in case term input field is empty
 DEFAULT_TERM = 'dinner'
 # location used in yelp search query in case location input field is empty
@@ -25,7 +25,7 @@ DEFAULT_LOCATION = 'San Francisco, CA'
 DEFAULT_SORT = 0
 
 # filter for biz-photos: all, food, inside, utside, menu or drink
-PIC_FILTER = ''#?tab=drink'
+PIC_FILTER = '?tab=food'
 
 ''' url query terms for Yelp API '''
 TERM = 'term'				# category of businesses

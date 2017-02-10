@@ -1,7 +1,7 @@
 build
 dist
-BASELINE
-yelp.egg-info
+VENV
+YelpPhotos.egg-info
 **.DS_store
 templates/googlemap.html
 templates/map.html
@@ -10,4 +10,4 @@ templates/test*
 templates/*title*
 **.pyc
 **.swp
-parser.log
+**.log

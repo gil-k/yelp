@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import grequests
 import json
+import logging
 
 '''  'yelp2' module is my contribution for extracting photos (biz-photos) '''
 
@@ -233,6 +234,9 @@ class Businesses(object):
     def parse_photo_box_images(self, business_response, photo_limit):
         parser = Parser(PHOTO_LIMIT)
         try:
+            logging.basicConfig(filename='content.log', level=logging.DEBUG)
+            logging.debug(business_response.content.decode('utf-8'))
+
             parser.feed(business_response.content.decode('utf-8'))
             html = ''.join(parser.data)
         except Exception, e:
