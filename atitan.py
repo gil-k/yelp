@@ -23,7 +23,7 @@ if not IS_PRODUCTION:
 
 
 ''' landing page for ATITAN.NET '''
-@app.route('/')
+@app.route('/home')
 def index():
     #if hasattr(sys, 'real_prefix'):
     #    return render_template('index.html')
@@ -44,7 +44,7 @@ def index():
 
 
 ''' "visual" presentation of yelp search results '''
-@app.route('/notreadyyelp/')
+@app.route('/')
 def yelp():
     # business photos (biz-photos) are extracted from yelp search results, 
     # and displayed one business per row. 

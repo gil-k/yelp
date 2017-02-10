@@ -76,9 +76,12 @@ class Visual_Yelp(object):
         # decorator for businesses results from Yelp search
         buss_obj = Businesses(response)
         try:
+            print "here in visual_yelp::biz_photo()"
             # from search response, get business infos, and
             # get biz-photos from photo box page of each businesses
             biz_photos = buss_obj.get_biz_photos()
+            print biz_photos
+
         except Exception, e:
             biz_photos = self.set_response_json('error', PARSE_ERROR) 
         finally:
