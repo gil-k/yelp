@@ -1,7 +1,7 @@
 build
 dist
 VENV
-YelpPhotos.egg-info
+Yelp_Photos.egg-info
 **.DS_store
 templates/googlemap.html
 templates/map.html
