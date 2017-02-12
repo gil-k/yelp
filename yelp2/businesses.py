@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import grequests
 import json
-import logging
+# import logging
 
 '''  'yelp2' module is my contribution for extracting photos (biz-photos) '''
 
@@ -72,6 +72,14 @@ class Businesses(object):
                     u"coords": rank+1,
                     u"lats": self.lat,
                     u"lngs": self.lng}
+
+        print "printing html"
+        # logging.basicConfig(filename='html.log', level=logging.DEBUG)
+        # logging.DEBUG((ret_val["html"]).content.decode('utf-8'))
+        with open('html.txt', 'w') as outfile:
+            json.dump(ret_val, outfile)
+        # print json.dumps(ret_val["html"])
+
         try:
             return json.dumps(ret_val)
         except Exception, e:
@@ -234,8 +242,8 @@ class Businesses(object):
     def parse_photo_box_images(self, business_response, photo_limit):
         parser = Parser(PHOTO_LIMIT)
         try:
-            logging.basicConfig(filename='content.log', level=logging.DEBUG)
-            logging.debug(business_response.content.decode('utf-8'))
+            # logging.basicConfig(filename='content.log', level=logging.INFO)
+            # logging.info(business_response.content.decode('utf-8'))
 
             parser.feed(business_response.content.decode('utf-8'))
             html = ''.join(parser.data)

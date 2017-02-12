@@ -33,13 +33,13 @@ class Parser(HTMLParser):
 
             # append found biz-photo into parse data
             if self.business_photo_count < self.photo_limit and self.attrs_count == 2:
-                logging.basicConfig(filename='example.log', level=logging.DEBUG)
-                logging.debug(src)
+                # logging.basicConfig(filename='example.log', level=logging.DEBUG)
+                # logging.debug(src)
 
                 self.data.append(''.join(["&nbsp;<img src='",
                # self.data.append(''.join(["&nbsp;<img src='https:", 
                                           src, 
-                                          "' width='226' height='226' />"]))
+                                          "'width='226'height='226'/>"]))
                 self.business_photo_count += 1
 
     def handle_endtag(self, tag):

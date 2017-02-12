@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import logging
 
 '''  'yelp' module for Yelp API '''
 from yelp.oauth1_authenticator import Oauth1Authenticator     # for Yelp search API 
@@ -80,7 +81,10 @@ class Visual_Yelp(object):
             # from search response, get business infos, and
             # get biz-photos from photo box page of each businesses
             biz_photos = buss_obj.get_biz_photos()
-            print biz_photos
+
+            # logging.basicConfig(filename='biz_photos.log', level=logging.DEBUG)
+            # logging.DEBUG(biz_photos['status'])
+            # print biz_photos
 
         except Exception, e:
             biz_photos = self.set_response_json('error', PARSE_ERROR) 

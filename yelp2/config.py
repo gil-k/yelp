@@ -12,7 +12,7 @@ PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 # maximum number of businesses displayed per page
 # currently set to 9 total until google map marker label can display 
 # more than 1 character
-SEARCH_LIMIT = 2
+SEARCH_LIMIT = 1
 # maximum number of biz-photos found in "photo-box" of a business
 # displayed in a single row, on page
 PHOTO_LIMIT = 2
