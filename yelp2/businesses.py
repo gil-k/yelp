@@ -68,17 +68,15 @@ class Businesses(object):
 
         # construct response json
         ret_val = { u"status": 'ok',
-                    u"html": ''.join(self.html),
+                    u"html": ''.join(self.photo_box_urls),
                     u"coords": rank+1,
                     u"lats": self.lat,
-                    u"lngs": self.lng}
-
-        print "printing html"
-        # logging.basicConfig(filename='html.log', level=logging.DEBUG)
-        # logging.DEBUG((ret_val["html"]).content.decode('utf-8'))
-        with open('html.txt', 'w') as outfile:
-            json.dump(ret_val, outfile)
-        # print json.dumps(ret_val["html"])
+                    u"lngs": self.lng}        
+        # ret_val = { u"status": 'ok',
+        #             u"html": ''.join(self.html),
+        #             u"coords": rank+1,
+        #             u"lats": self.lat,
+        #             u"lngs": self.lng}
 
         try:
             return json.dumps(ret_val)

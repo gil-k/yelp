@@ -14,12 +14,28 @@ from yelp2.url_params import Url_Params     # set up parameters to use Yelp sear
 from yelp2.config import DEFAULT_TERM       # term/category for yelp search query in case term input field is empty
 from yelp2.config import DEFAULT_LOCATION   # default location for yelp search query
 from yelp2.visual_yelp import Visual_Yelp # wrapper for yelp client object
+import logging
+from logging.handlers import RotatingFileHandler
+
 
 app = Flask(__name__)
 
 IS_PRODUCTION = (os.getenv('PYTHON_ENV', False) == "production")
 if not IS_PRODUCTION:
     app.debug = True
+
+
+# on-going test page
+@app.route('/gumsa/')
+def test():
+    # browser ip used to obtain geolocation
+    client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    util = Url_Params()
+    location = util.get_location(client_ip) 
+
+    # print "Location is %s." % location
+    return render_template('yelp.html', term=DEFAULT_TERM, loc=location)
+    # return render_template('test.html')
 
 
 ''' landing page for ATITAN.NET '''
@@ -46,6 +62,12 @@ def index():
 ''' "visual" presentation of yelp search results '''
 @app.route('/')
 def yelp():
+    # app.logger.warning('warning message')
+    # app.logger.error('error message')
+    #logging.basicConfig(filename='atitan.log', level=logging.WARNING)
+    #logging.debug('debug message')
+    #logging.info('info message')
+    #logging.warning('warning message')
     # business photos (biz-photos) are extracted from yelp search results, 
     # and displayed one business per row. 
 
@@ -81,26 +103,21 @@ def main():
     yelp = Visual_Yelp()
     biz_photos = yelp.biz_photos()
 
-    print str(time()-a)     # to measure elapsed time
+    # print str(time()-a)     # to measure elapsed time
 
     return biz_photos   # json containing status, html for biz-photos,
                         # longitudes and latitudes of businesses for google map
-
 
 # test page for google map
 @app.route('/googlemap/')
 def googlemap():
     return render_template('googlemap.html')
 
-
-# on-going test page
-@app.route('/test2/')
-def test():
-    return render_template('test2.html')
-
-
 if __name__ == "__main__":
-    app.run(
+    # handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
+    # handler.setLevel(logging.INFO)
+    # app.logger.addHandler(handler)
+    app.run(debug=True
         # host=os.getenv('IP', '0.0.0.0'),
         # port=int(os.getenv('PORT', '8080'))
     )
