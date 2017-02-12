@@ -31,6 +31,7 @@ class Businesses(object):
         # latitude & longitude coordinate of businesses
         self.lng = []
         self.lat = []
+        self.mssg = []
 
     # returns business info (name, rating, address, etc.) and biz-photo images
     # displayed per row per business, up to self.photo_limit images per business
@@ -46,14 +47,16 @@ class Businesses(object):
             self.get_photo_urls();
         except Exception, e:
             raise
-
+        print "self.photo_box_urls is %s" % self.photo_box_urls
         # retrieve phot-box pages of all the businesses, using non-blocking call
         try:
             unsent_request = (grequests.get(url) for url in self.photo_box_urls)
+            # returns Request Response object
+            # request.Response.content, .json (**kwargs), .status_code etc.
             photo_box_responses = grequests.map(unsent_request) 
         except Exception, e:
             raise
-
+        # print "photo_box_responses is %s" % photo_box_responses[0].content
         # get latitudes and longitudes of businesses, center is average of coordinates
         try:
             self.get_coordinates();
@@ -68,7 +71,8 @@ class Businesses(object):
 
         # construct response json
         ret_val = { u"status": 'ok',
-                    u"html": ''.join(self.photo_box_urls),
+                    u"html": ''.join(photo_box_responses[0].content),
+                    # u"html": ''.join(self.photo_box_urls),
                     u"coords": rank+1,
                     u"lats": self.lat,
                     u"lngs": self.lng}        
