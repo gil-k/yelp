@@ -78,6 +78,9 @@ class Businesses(object):
         print "sStatus = %s " % sStatus
         sUrl = photo_box_responses[0].url
         print "url = %s " % sUrl
+
+        self.html.append(''.join(["&nbsp;&nbsp;", sStatus,"<p><p>&nbsp;&nbsp;", sUrl , "<p><p>"]))#" class='photo_box'",#" id='row is ",
+
         # construct response json
         ret_val = { u"status": 'ok',
                     # u"html": ''.join(photo_box_responses[0].status_code, " ", photo_box_responses[0].url),
@@ -244,8 +247,8 @@ class Businesses(object):
         
         # not enough biz-photos to fill a row, need PHOTO_LIMIT images
         if biz_photos <  PHOTO_LIMIT:
-            placeholder_img = "<img src='/static/yelp_images/placeholder.jpg' width='226' height='226'/>&nbsp;"
-
+            # placeholder_img = "<img src='/static/yelp_images/placeholder.jpg' width='226' height='226'/>&nbsp;"
+            placeholder_img = "<p><p>&nbsp;&nbsp; no images"
             for rank in range(PHOTO_LIMIT - biz_photos):
                 new_html.append(placeholder_img)
 
