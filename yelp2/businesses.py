@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import grequests
 import json
-# import logging
+import urllib 
 
 '''  'yelp2' module is my contribution for extracting photos (biz-photos) '''
 
@@ -47,7 +47,7 @@ class Businesses(object):
             self.get_photo_urls();
         except Exception, e:
             raise
-        print "self.photo_box_urls is %s" % self.photo_box_urls
+        # print "self.photo_box_urls is %s" % self.photo_box_urls
         # retrieve phot-box pages of all the businesses, using non-blocking call
         try:
             unsent_request = (grequests.get(url) for url in self.photo_box_urls)
@@ -56,7 +56,7 @@ class Businesses(object):
             photo_box_responses = grequests.map(unsent_request) 
         except Exception, e:
             raise
-        # print "photo_box_responses is %s" % photo_box_responses[0].content
+        # print "photo_box_responses is %s" % photo_box_responses[0].status_code
         # get latitudes and longitudes of businesses, center is average of coordinates
         try:
             self.get_coordinates();
@@ -69,10 +69,19 @@ class Businesses(object):
         except Exception, e:
             raise
 
+        # print "status= %s" % photo_box_responses[0].status_code
+        # print "url= %s" % photo_box_responses[0].url
+        # mssg = ''.join([photo_box_responses[0].status_code, " ", photo_box_responses[0].url])
+        # print "status & url = %s" % mssg
+        # print "code %s %s" % photo_box_responses[0].status_code, photo_box_responses[0].url
+        sStatus = str(photo_box_responses[0].status_code)
+        print "sStatus = %s " % sStatus
+        sUrl = photo_box_responses[0].url
+        print "url = %s " % sUrl
         # construct response json
         ret_val = { u"status": 'ok',
-                    u"html": ''.join(photo_box_responses[0].content),
-                    # u"html": ''.join(self.photo_box_urls),
+                    # u"html": ''.join(photo_box_responses[0].status_code, " ", photo_box_responses[0].url),
+                    u"html": ''.join([sStatus, " ", sUrl]),
                     u"coords": rank+1,
                     u"lats": self.lat,
                     u"lngs": self.lng}        
@@ -259,4 +268,45 @@ class Businesses(object):
             return self.add_placeholder(html)
         except Exception, e:
             raise
+
+    def html2text(self, strText):
+        str1 = strText
+        int2 = str1.lower().find("<body")
+        if int2>0:
+           str1 = str1[int2:]
+        int2 = str1.lower().find("</body>")
+        if int2>0:
+           str1 = str1[:int2]
+        list1 = ['<br>',  '<tr',  '<td', '</p>', 'span>', 'li>', '</h', 'div>' ]
+        list2 = [chr(13), chr(13), chr(9), chr(13), chr(13),  chr(13), chr(13), chr(13)]
+        bolFlag1 = True
+        bolFlag2 = True
+        strReturn = ""
+        for int1 in range(len(str1)):
+          str2 = str1[int1]
+          for int2 in range(len(list1)):
+            if str1[int1:int1+len(list1[int2])].lower() == list1[int2]:
+               strReturn = strReturn + list2[int2]
+          if str1[int1:int1+7].lower() == '<script' or str1[int1:int1+9].lower() == '<noscript':
+             bolFlag1 = False
+          if str1[int1:int1+6].lower() == '<style':
+             bolFlag1 = False
+          if str1[int1:int1+7].lower() == '</style':
+             bolFlag1 = True
+          if str1[int1:int1+9].lower() == '</script>' or str1[int1:int1+11].lower() == '</noscript>':
+             bolFlag1 = True
+          if str2 == '<':
+             bolFlag2 = False
+          if bolFlag1 and bolFlag2 and (ord(str2) != 10) :
+            strReturn = strReturn + str2
+          if str2 == '>':
+             bolFlag2 = True
+          if bolFlag1 and bolFlag2:
+            strReturn = strReturn.replace(chr(32)+chr(13), chr(13))
+            strReturn = strReturn.replace(chr(9)+chr(13), chr(13))
+            strReturn = strReturn.replace(chr(13)+chr(32), chr(13))
+            strReturn = strReturn.replace(chr(13)+chr(9), chr(13))
+            strReturn = strReturn.replace(chr(13)+chr(13), chr(13))
+        strReturn = strReturn.replace(chr(13), '\n')
+        return strReturn
 
