@@ -29,6 +29,7 @@ class Parser(HTMLParser):
                     self.attrs_count += 1
                     #print ''.join([name, " found ", str(self.attrs_count)])
                 if name == 'src':
+                    self.data.append(''.join(["<p>&nbsp;&nbsp;", value , "<p>",]))
                     src = value
 
             # append found biz-photo into parse data
