@@ -11,3 +11,4 @@ templates/*title*
 **.pyc
 **.swp
 **.log
+**.txt

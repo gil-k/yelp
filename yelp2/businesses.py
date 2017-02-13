@@ -81,7 +81,8 @@ class Businesses(object):
         # construct response json
         ret_val = { u"status": 'ok',
                     # u"html": ''.join(photo_box_responses[0].status_code, " ", photo_box_responses[0].url),
-                    u"html": ''.join([sStatus, " ", sUrl]),
+                    # u"html": ''.join([sStatus, " ", sUrl]),
+                    u"html": ''.join(self.html),
                     u"coords": rank+1,
                     u"lats": self.lat,
                     u"lngs": self.lng}        
@@ -161,6 +162,7 @@ class Businesses(object):
                 except Exception, e:
                     raise
 
+                print "biz_photos = %s" % biz_photos
                 self.html.append(''.join(["<span>",#" class='photo_box'",#" id='row is ",
                                           # str(rank),
                                           # "' ",
@@ -253,10 +255,9 @@ class Businesses(object):
     def parse_photo_box_images(self, business_response, photo_limit):
         parser = Parser(PHOTO_LIMIT)
         try:
-            # logging.basicConfig(filename='content.log', level=logging.INFO)
-            # logging.info(business_response.content.decode('utf-8'))
-
+            # print business_response.content.decode('utf-8')
             parser.feed(business_response.content.decode('utf-8'))
+            # print "parser data = %s" % parser.data
             html = ''.join(parser.data)
         except Exception, e:
             raise
@@ -268,45 +269,4 @@ class Businesses(object):
             return self.add_placeholder(html)
         except Exception, e:
             raise
-
-    def html2text(self, strText):
-        str1 = strText
-        int2 = str1.lower().find("<body")
-        if int2>0:
-           str1 = str1[int2:]
-        int2 = str1.lower().find("</body>")
-        if int2>0:
-           str1 = str1[:int2]
-        list1 = ['<br>',  '<tr',  '<td', '</p>', 'span>', 'li>', '</h', 'div>' ]
-        list2 = [chr(13), chr(13), chr(9), chr(13), chr(13),  chr(13), chr(13), chr(13)]
-        bolFlag1 = True
-        bolFlag2 = True
-        strReturn = ""
-        for int1 in range(len(str1)):
-          str2 = str1[int1]
-          for int2 in range(len(list1)):
-            if str1[int1:int1+len(list1[int2])].lower() == list1[int2]:
-               strReturn = strReturn + list2[int2]
-          if str1[int1:int1+7].lower() == '<script' or str1[int1:int1+9].lower() == '<noscript':
-             bolFlag1 = False
-          if str1[int1:int1+6].lower() == '<style':
-             bolFlag1 = False
-          if str1[int1:int1+7].lower() == '</style':
-             bolFlag1 = True
-          if str1[int1:int1+9].lower() == '</script>' or str1[int1:int1+11].lower() == '</noscript>':
-             bolFlag1 = True
-          if str2 == '<':
-             bolFlag2 = False
-          if bolFlag1 and bolFlag2 and (ord(str2) != 10) :
-            strReturn = strReturn + str2
-          if str2 == '>':
-             bolFlag2 = True
-          if bolFlag1 and bolFlag2:
-            strReturn = strReturn.replace(chr(32)+chr(13), chr(13))
-            strReturn = strReturn.replace(chr(9)+chr(13), chr(13))
-            strReturn = strReturn.replace(chr(13)+chr(32), chr(13))
-            strReturn = strReturn.replace(chr(13)+chr(9), chr(13))
-            strReturn = strReturn.replace(chr(13)+chr(13), chr(13))
-        strReturn = strReturn.replace(chr(13), '\n')
-        return strReturn
 

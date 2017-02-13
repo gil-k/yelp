@@ -36,10 +36,13 @@ class Parser(HTMLParser):
                 # logging.basicConfig(filename='example.log', level=logging.DEBUG)
                 # logging.debug(src)
 
-                self.data.append(''.join(["&nbsp;<img src='",
-               # self.data.append(''.join(["&nbsp;<img src='https:", 
+               #  self.data.append(''.join(["&nbsp;<img src='",
+               # # self.data.append(''.join(["&nbsp;<img src='https:", 
+               #                            src, 
+               #                            "'width='226'height='226'/>"]))
+                self.data.append(''.join(["<p><p>&nbsp;&nbsp;",
                                           src, 
-                                          "'width='226'height='226'/>"]))
+                                          "<p>"]))
                 self.business_photo_count += 1
 
     def handle_endtag(self, tag):
