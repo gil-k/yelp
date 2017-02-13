@@ -63,23 +63,20 @@ class Businesses(object):
         except Exception, e:
             raise
 
+        sStatus = str(photo_box_responses[0].status_code)
+        # print "sStatus = %s " % sStatus
+        sUrl = photo_box_responses[0].url
+        # print "url = %s " % sUrl
+        self.html.append(''.join(["&nbsp;&nbsp;", sStatus,"<p><p>&nbsp;&nbsp;", sUrl , "<p><p>"]))#" class='photo_box'",#" id='row is ",
+        self.html.append("<!-- ")
+        self.html.append(photo_box_responses[0].text)
+        self.html.append(" -->")
+
         # scrap biz-photos from photo-box pages        
         try:
             rank = self.get_html(photo_box_responses);
         except Exception, e:
             raise
-
-        # print "status= %s" % photo_box_responses[0].status_code
-        # print "url= %s" % photo_box_responses[0].url
-        # mssg = ''.join([photo_box_responses[0].status_code, " ", photo_box_responses[0].url])
-        # print "status & url = %s" % mssg
-        # print "code %s %s" % photo_box_responses[0].status_code, photo_box_responses[0].url
-        sStatus = str(photo_box_responses[0].status_code)
-        print "sStatus = %s " % sStatus
-        sUrl = photo_box_responses[0].url
-        print "url = %s " % sUrl
-
-        self.html.append(''.join(["&nbsp;&nbsp;", sStatus,"<p><p>&nbsp;&nbsp;", sUrl , "<p><p>"]))#" class='photo_box'",#" id='row is ",
 
         # construct response json
         ret_val = { u"status": 'ok',
