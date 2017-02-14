@@ -47,15 +47,32 @@ class Businesses(object):
             self.get_photo_urls();
         except Exception, e:
             raise
-        # print "self.photo_box_urls is %s" % self.photo_box_urls
-        # retrieve phot-box pages of all the businesses, using non-blocking call
+
+        # try:
+        #     session = requests.Session()
+        #     # unsent_requests=(grequests.get(url, hooks = {'response' : find_rest_ids}, session=session) for url in self.photo_box_urls)
+        #     unsent_requests=(grequests.get(url, session=session) for url in self.photo_box_urls)
+        #     photo_box_responses = grequests.map(unsent_requests, size=20) 
+        # except Exception, e:
+        #     raise
+
         try:
-            unsent_request = (grequests.get(url) for url in self.photo_box_urls)
+            unsent_request = (grequests.get(url, stream=False) for url in self.photo_box_urls)
             # returns Request Response object
             # request.Response.content, .json (**kwargs), .status_code etc.
             photo_box_responses = grequests.map(unsent_request) 
         except Exception, e:
             raise
+
+        # print "self.photo_box_urls is %s" % self.photo_box_urls
+        # retrieve phot-box pages of all the businesses, using non-blocking call
+        # try:
+        #     unsent_request = (grequests.get(url) for url in self.photo_box_urls)
+        #     # returns Request Response object
+        #     # request.Response.content, .json (**kwargs), .status_code etc.
+        #     photo_box_responses = grequests.map(unsent_request) 
+        # except Exception, e:
+        #     raise
         # print "photo_box_responses is %s" % photo_box_responses[0].status_code
         # get latitudes and longitudes of businesses, center is average of coordinates
         try:
@@ -92,7 +109,9 @@ class Businesses(object):
                     u"coords": rank+1,
                     u"lats": self.lat,
                     u"lngs": self.lng}
-
+        for response in photo_box_responses:
+            response.close()
+        
         try:
             return json.dumps(ret_val)
         except Exception, e:
