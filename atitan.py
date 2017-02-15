@@ -117,15 +117,11 @@ if __name__ == "__main__":
     # handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
     # handler.setLevel(logging.INFO)
     # app.logger.addHandler(handler)
-    app.run(debug=True
-        # host=os.getenv('IP', '0.0.0.0'),
-        # port=int(os.getenv('PORT', '8080'))
-    )
-#    if app.debug:
-#        app.run(
-#            host=os.getenv('IP', '0.0.0.0'),
-#            port=int(os.getenv('PORT', '8080'))
-#        )
-#    else:
-#        app.run()
+    if app.debug:
+        app.run(
+            host=os.getenv('IP', '0.0.0.0'),
+            port=int(os.getenv('PORT', '8080'))
+        )
+    else:
+        app.run()
 
