@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import requests
 import grequests
 import json
 import urllib 
@@ -57,7 +58,8 @@ class Businesses(object):
         #     raise
 
         try:
-            unsent_request = (grequests.get(url, stream=False) for url in self.photo_box_urls)
+            session = requests.Session()
+            unsent_request = (grequests.get(url, stream=False, session=session) for url in self.photo_box_urls)
             # returns Request Response object
             # request.Response.content, .json (**kwargs), .status_code etc.
             photo_box_responses = grequests.map(unsent_request) 
@@ -81,14 +83,21 @@ class Businesses(object):
             raise
 
         sStatus = str(photo_box_responses[0].status_code)
-        
-        # # print "sStatus = %s " % sStatus
-        # sUrl = photo_box_responses[0].url
-        # # print "url = %s " % sUrl
-        # self.html.append(''.join(["&nbsp;&nbsp;", sStatus,"<p><p>&nbsp;&nbsp;", sUrl , "<p><p>"]))#" class='photo_box'",#" id='row is ",
-        # self.html.append("<!-- ")
-        # self.html.append(photo_box_responses[0].text)
-        # self.html.append(" -->")
+        print "sStatus = %s " % sStatus
+        sUrl = photo_box_responses[0].url
+        print "url = %s " % sUrl
+        #self.html.append(''.join(["&nbsp;&nbsp;", sStatus,"<p><p>&nbsp;&nbsp;", sUrl , "<p><p>"]))#" class='photo_box'",#" id='row is ",
+        #self.html.append("<!-- ")
+        #self.html.append(photo_box_responses[0].text)
+        #self.html.append(" -->")
+        if isinstance(photo_box_responses[0].text, basestring):
+            print "response content is text"
+        else:
+            print "response content is not text"
+        foo = u'Δ, Й, ק, ‎ م, ๗, あ, 叶, 葉, and 말.'
+        f = open('htmlcontent', 'w')
+        f.write(photo_box_responses[0].text.encode('utf8'))
+        f.close()
 
         # scrap biz-photos from photo-box pages        
         try:
@@ -97,18 +106,18 @@ class Businesses(object):
             raise
 
         # construct response json
-        # ret_val = { u"status": 'ok',
-        #             # u"html": ''.join(photo_box_responses[0].status_code, " ", photo_box_responses[0].url),
-        #             # u"html": ''.join([sStatus, " ", sUrl]),
-        #             u"html": ''.join(self.html),
-        #             u"coords": rank+1,
-        #             u"lats": self.lat,
-        #             u"lngs": self.lng}        
         ret_val = { u"status": 'ok',
-                    u"html": ''.join(self.html),
-                    u"coords": rank+1,
-                    u"lats": self.lat,
-                    u"lngs": self.lng}
+                     # u"html": ''.join(photo_box_responses[0].status_code, " ", photo_box_responses[0].url),
+                     u"html": ''.join([sStatus, " ", sUrl]),
+                     u"html": ''.join(self.html),
+                     u"coords": rank+1,
+                     u"lats": self.lat,
+                     u"lngs": self.lng}        
+        #ret_val = { u"status": 'ok',
+        #            u"html": ''.join(self.html),
+        #            u"coords": rank+1,
+        #            u"lats": self.lat,
+        #            u"lngs": self.lng}
         for response in photo_box_responses:
             response.close()
         
