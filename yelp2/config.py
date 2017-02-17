@@ -12,10 +12,10 @@ PHOTO_BOX_PATH = 'http://www.yelp.com/biz_photos/'
 # maximum number of businesses displayed per page
 # currently set to 9 total until google map marker label can display 
 # more than 1 character
-SEARCH_LIMIT = 1
+SEARCH_LIMIT = 10
 # maximum number of biz-photos found in "photo-box" of a business
 # displayed in a single row, on page
-PHOTO_LIMIT = 1
+PHOTO_LIMIT = 10
 # term/category for yelp search query in case term input field is empty
 DEFAULT_TERM = 'dinner'
 # location used in yelp search query in case location input field is empty

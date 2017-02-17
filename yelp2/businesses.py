@@ -90,12 +90,11 @@ class Businesses(object):
         #self.html.append("<!-- ")
         #self.html.append(photo_box_responses[0].text)
         #self.html.append(" -->")
-        if isinstance(photo_box_responses[0].text, basestring):
-            print "response content is text"
-        else:
-            print "response content is not text"
-        foo = u'Δ, Й, ק, ‎ م, ๗, あ, 叶, 葉, and 말.'
-        f = open('htmlcontent', 'w')
+        #if isinstance(photo_box_responses[0].text, basestring):
+        #    print "response content is text"
+        #else:
+        #    print "response content is not text"
+        f = open('htmlcontent.txt', 'w')
         f.write(photo_box_responses[0].text.encode('utf8'))
         f.close()
 
