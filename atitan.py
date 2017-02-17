@@ -25,40 +25,6 @@ if not IS_PRODUCTION:
     app.debug = True
 
 
-# on-going test page
-@app.route('/gumsa/')
-def test():
-    # browser ip used to obtain geolocation
-    client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    util = Url_Params()
-    location = util.get_location(client_ip) 
-
-    # print "Location is %s." % location
-    return render_template('yelp.html', term=DEFAULT_TERM, loc=location)
-    # return render_template('test.html')
-
-
-''' landing page for ATITAN.NET '''
-@app.route('/home')
-def index():
-    #if hasattr(sys, 'real_prefix'):
-    #    return render_template('index.html')
-    #else:
-    #    return "no virtual environment found"
-
-     # displays following links:
-     link_id_1 = 'YelpPhotos'       # "visual-yelp page"
-     link_url_1 = '/yelp/'
-     link_id_2 = 'LinkedIn'     # personal LinkedIn page"
-     link_url_2 = 'https://www.linkedin.com/in/gilkwak'
-
-     return render_template('index.html', 
-                             link_id_1=link_id_1, 
-                             link_url_1=link_url_1,
-                             link_id_2=link_id_2, 
-                             link_url_2=link_url_2)
-
-
 ''' "visual" presentation of yelp search results '''
 @app.route('/')
 def yelp():
@@ -91,6 +57,32 @@ def yelp():
     # pass location info to yelp page
     return render_template('yelp.html', term=DEFAULT_TERM, loc=location)
 
+
+''' landing page for ATITAN.NET '''
+@app.route('/kd')
+def kd():
+     return render_template('kd.html')
+
+''' landing page for ATITAN.NET '''
+@app.route('/home')
+def index():
+    #if hasattr(sys, 'real_prefix'):
+    #    return render_template('index.html')
+    #else:
+    #    return "no virtual environment found"
+
+     # displays following links:
+     link_id_1 = 'YelpPhotos'       # "visual-yelp page"
+     link_url_1 = '/yelp/'
+     link_id_2 = 'LinkedIn'     # personal LinkedIn page"
+     link_url_2 = 'https://www.linkedin.com/in/gilkwak'
+
+     return render_template('index.html', 
+                             link_id_1=link_id_1, 
+                             link_url_1=link_url_1,
+                             link_id_2=link_id_2, 
+                             link_url_2=link_url_2)
+
     
 """ Displays results of Yelp http get request """
 @app.route("/search/", methods=["GET"])
@@ -112,6 +104,19 @@ def main():
 @app.route('/googlemap/')
 def googlemap():
     return render_template('googlemap.html')
+
+# on-going test page
+@app.route('/gumsa/')
+def test():
+    # browser ip used to obtain geolocation
+    client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    util = Url_Params()
+    location = util.get_location(client_ip) 
+
+    # print "Location is %s." % location
+    return render_template('yelp.html', term=DEFAULT_TERM, loc=location)
+    # return render_template('test.html')
+
 
 if __name__ == "__main__":
     # handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
