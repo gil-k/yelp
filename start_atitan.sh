@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-cd /var/www/atitan/atitan
+cd /home/kd/atitan/atitan
 # run manually first virtualenv VENV --no-site-packages
-. VENV/bin/activate # venv
+. venv/bin/activate
 #pip install Flask
 # run manually first python setup.py install
 #pip install requests

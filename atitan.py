@@ -24,9 +24,12 @@ IS_PRODUCTION = (os.getenv('PYTHON_ENV', False) == "production")
 if not IS_PRODUCTION:
     app.debug = True
 
+@app.route('/')
+def index():
+     return render_template('index.html')
 
 ''' "visual" presentation of yelp search results '''
-@app.route('/')
+@app.route('/pley')
 def yelp():
     # app.logger.warning('warning message')
     # app.logger.error('error message')
@@ -65,7 +68,7 @@ def kd():
 
 ''' landing page for ATITAN.NET '''
 @app.route('/home')
-def index():
+def home():
     #if hasattr(sys, 'real_prefix'):
     #    return render_template('index.html')
     #else:

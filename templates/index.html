@@ -1,52 +1,59 @@
-{% extends "master.html" %}
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow">
 
-{% block body %}
+    <title>Page</title>
 
-<!-- LANDING PAGE FOR ATITAN.NET -->
-<footer>
-    <div id="wrap">
-        <div id="banner"></div>
-    </div>
-</footer> 
+    <link rel="icon" href="/static/favicon.png?">
 
-<div id="main">
-	<div class="centered">
-<!-- <font color="#000000">
-						<p>
-						<p>Yelp Photos
-						<p>
-						<p>Coding Exercises
-						<p>
-						<p>LinkedIn</em></div>
-</font> -->
+    <link type="text/css" rel="stylesheet"
+    href="static/style_kd.css" />
 
-	<!-- displays various links passed by client python program -->
-		
-	 	<div id="link">
-	 		<p><p>
-			<div class="textbox">
-			<img src="static/yelpLogo.png" style="vertical-align:middle" alt="Yelp" width="24" height="28">&nbsp;&nbsp;&nbsp;
-		  		<a href={{link_url_1}}>{{link_id_1}}</a>
-		  	</div>
-		</div>
-		
-	 	<div id="link">
-	 		<p><p>
-	 		<div class="textbox">
-		  		<img src="/static/linkedinLogo.png" style="vertical-align:middle" alt="LinkedIn page" width="37" height="28">&nbsp;&nbsp;&nbsp;
-		  		<a href={{link_url_2}}>{{link_id_2}}</a>
-		  	</div>
-		</div>
+</head>
 
-	 	<div id="link">
-	 		<p><p>
-	 		<div class="textbox">
-	 		<img src="static/bitbucket.png" style="vertical-align:middle" alt="Bitbucket" width="28" height="28">&nbsp;&nbsp;&nbsp;
-		  		<a href={{link_url_3}}>{{link_id_3}}</a>
-		  	</div>
-		</div>
+<body>
 
-	</div>
+    <footer>
+        <div id="wrap">
+            <a href="/kd"><div id="banner"></div></a>
+        </div>
+    </footer> 
+
+    <div id="main">
+
+        <div class="boxed">
+
+            <div id="title">
+              <img src="static/yelpLogo.png" style="vertical-align:middle" alt="Yelp" width="24" height="28">&nbsp;&nbsp;&nbsp;Yelp Photos<br/>
+
+            </div>
+
+<!--            <img src="static/yelp_photos_screenshot.jpeg" style="vertical-align:middle"  alt="Yelp Photos" width="532" height="359"><br/>-->
+            <br/><img src="static/yelp-photos.jpeg" style="vertical-align:middle"  alt="Yelp Photos" width="651" height="362"><br/><br/>
+
+            Yelp search results displayed as rows of user photos.  Implemented in Python with Flask, using non-blocking API requests and web-scraping.<br/><br/><br/><br/>
+
+    <br/><br/><br/><br/><br/><br/>
 
 </div>
-{% endblock %}
+
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
