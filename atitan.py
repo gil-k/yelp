@@ -26,10 +26,11 @@ if not IS_PRODUCTION:
 
 @app.route('/')
 def index():
-     return render_template('index.html')
+    return render_template('kd.html')
+    #return render_template('index.html')
 
 ''' "visual" presentation of yelp search results '''
-@app.route('/pley')
+@app.route('/yelp')
 def yelp():
     # app.logger.warning('warning message')
     # app.logger.error('error message')
@@ -66,6 +67,11 @@ def yelp():
 def kd():
      return render_template('kd.html')
 
+@app.route('/coding')
+def coding():
+     return render_template('coding.html')
+
+
 ''' landing page for ATITAN.NET '''
 @app.route('/home')
 def home():
@@ -80,7 +86,7 @@ def home():
      link_id_2 = 'LinkedIn'     # personal LinkedIn page"
      link_url_2 = 'https://www.linkedin.com/in/gilkwak'
 
-     return render_template('index.html', 
+     return render_template('indexhtml.html', 
                              link_id_1=link_id_1, 
                              link_url_1=link_url_1,
                              link_id_2=link_id_2, 
