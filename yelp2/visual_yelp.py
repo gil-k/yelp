@@ -3,13 +3,12 @@ import sys
 import json
 import logging
 
-'''  'yelp' module for Yelp API '''
-from yelp.oauth1_authenticator import Oauth1Authenticator     # for Yelp search API 
+'''  Yelp API module '''
+from yelp.oauth1_authenticator import Oauth1Authenticator # for Yelp search API 
 from yelp.client import Client     	    # search ops performed via client obj
 from yelp.config import SEARCH_PATH     # search url per Yelp API
 
-
-'''  'yelp2' module is my contribution for extracting photos (biz-photos) '''
+'''  'yelp2' module extracts business photos (biz-photos) '''
 from yelp2.businesses import Businesses     # extracts business info and photos
 from yelp2.url_params import Url_Params     # set up parameters to use Yelp search API
 from yelp2.config import CREDENTIAL_FILE    # credential for Yelp API
@@ -25,7 +24,42 @@ class Visual_Yelp(object):
     def __init__(self):
         self.credentials = {}
         
-    # load Yelp API credential json file
+    def biz_photos(self):
+
+        # load Yelp API Credential json file (YELP API)
+        self.credentials = self.get_credentials()
+        if self.credentials == None:
+            return self.set_response_json('error', CRED_ERROR)
+
+        # get Yelp Client Object with credentials (YELP API)
+        client = self.get_client()
+        if client == None:
+            return self.set_response_json('error', AUTH_ERROR)
+
+        # get/parse URL for Search Term/Category, Location/Region, and [optional] sorting method
+        param = Url_Params()
+        url_params = param.get_url_params()
+        if url_params == None:
+            return self.set_response_json('error', PARAM_ERROR)
+
+        # get List of Businesses for chosen Term/Category and Location/Region (YELP API)
+        try:
+            response = client._make_request(SEARCH_PATH, url_params)
+        except Exception, e:
+            return self.set_response_json('error', YELP_ERROR) 
+
+        # decorator for list of businesses informations from Yelp search
+        buss_obj = Businesses(response)
+        try:
+            # get all user photos from each business's photo box page on Yelp.com
+            biz_photos = buss_obj.get_biz_photos()
+
+        except Exception, e:
+            biz_photos = self.set_response_json('error', PARSE_ERROR) 
+        finally:
+            return biz_photos
+
+    # load Yelp API Credential json file (YELP API)
     def get_credentials(self):
         try:
             filepath = sys.prefix + '/../' + CREDENTIAL_FILE 
@@ -36,8 +70,7 @@ class Visual_Yelp(object):
         finally:
             return credentials
 
-
-    # Yelp client object with credentials
+    # get Yelp Client Object with credentials (YELP API)
     def get_client(self):
         try:
             # credential object
@@ -48,47 +81,6 @@ class Visual_Yelp(object):
             client = None
         finally:
             return client
-
-
-    def biz_photos(self):
-        # load Yelp API credential json file
-        self.credentials = self.get_credentials()
-        if self.credentials == None:
-            return self.set_response_json('error', CRED_ERROR)
-
-        # Yelp client object with credentials
-        client = self.get_client()
-        if client == None:
-            return self.set_response_json('error', AUTH_ERROR)
-
-        # parse url for search terms, location [& sorting method]
-        param = Url_Params()
-        url_params = param.get_url_params()
-        if url_params == None:
-            return self.set_response_json('error', PARAM_ERROR)
-
-        # Get list of businesses for chosen categories and region
-        try:
-            response = client._make_request(SEARCH_PATH, url_params)
-        except Exception, e:
-            return self.set_response_json('error', YELP_ERROR) 
-
-
-        # decorator for businesses results from Yelp search
-        buss_obj = Businesses(response)
-        try:
-            # print "here in visual_yelp::biz_photo()"
-            # from search response, get business infos, and
-            # get biz-photos from photo box page of each businesses
-            biz_photos = buss_obj.get_biz_photos()
-
-            # print biz_photos
-
-        except Exception, e:
-            biz_photos = self.set_response_json('error', PARSE_ERROR) 
-        finally:
-            return biz_photos
-
 
     # response from query results or error to be passed to yelp.html
     def set_response_json(self, status, html, coords=None, lats=None, lngs=None):
@@ -103,5 +95,4 @@ class Visual_Yelp(object):
         if lngs:
             response.update({u'lngs': lngs})
         # average of lats & lngs, center of all businesses, is in lats[coords], etc.
-
         return json.dumps(response)

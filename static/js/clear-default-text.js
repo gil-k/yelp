@@ -42,3 +42,18 @@ function replaceDefaultText(e) {
         target.value = target.defaultText;
     }
 }
+
+/* 
+ * Cross-browser event handling, by Scott Andrew
+ */
+function addEvent(element, eventType, lamdaFunction, useCapture) {
+    if (element.addEventListener) {
+        element.addEventListener(eventType, lamdaFunction, useCapture);
+        return true;
+    } else if (element.attachEvent) {
+        var r = element.attachEvent('on' + eventType, lamdaFunction);
+        return r;
+    } else {
+        return false;
+    }
+}

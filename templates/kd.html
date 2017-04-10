@@ -1,217 +1,184 @@
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-    <meta charset="utf-8" />
-    <meta name="robots" content="noindex, nofollow">
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="robots" content="noindex, nofollow">
 
-    <title>Page</title>
+        <title>Page</title>
 
-    <link rel="icon" href="/static/favicon.png?">
+        <link rel="icon" href="/static/favicon.png?">
 
-    <link type="text/css" rel="stylesheet"
-    href="static/style_kd.css" />
-    <script type="text/javascript"
-    src="{{ url_for('static',
-    filename='js/jquery-1.12.4.min.js')}}" >
-</script>
-
-    <!--<script type="text/javascript">
-            var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-        </script> -->
-
-        <script language="JavaScript" type="text/javascript">
+        <link type="text/css" rel="stylesheet"
+        href="static/style_kd.css" />
+        <script type="text/javascript"
+        src="{{ url_for('static',
+        filename='js/jquery-1.12.4.min.js')}}" >
+    </script>
+            <script language="JavaScript" type="text/javascript">
             <!-- Copyright 2007, Sandeep Gangadharan -->
-    <!-- For more free scripts go to http://www.sivamdesign.com/scripts/ -->
-    <!--
-    // if (document.getElementById) {
-    //  document.write('<style type="text/css">.texter {display:none; border-left:white 20px solid; color:#404040; font-family:verdana,arial,helvetica,sans-serif; font-size:9pt} @media print {.texter {display:block;}}</style>') }
-    if (document.getElementById) {
-     document.write('<style type="text/css">.texter {display:none; border-left:white 30px solid;} @media print {.texter {display:block;}}</style>') }
+        <!--
+        if (document.getElementById) {
+         document.write('<style type="text/css">.texter {display:none; border-left:white 30px solid;} @media print {.texter {display:block;}}</style>') }
 
-     var divNum = new Array("a1", "a2", "a3", "a4", "a5"); 
-     function openClose(theID) {
-         for(var i=0; i < divNum.length; i++) {
-          if (divNum[i] == theID) {
-           if (document.getElementById(divNum[i]).style.display == "block") { document.getElementById(divNum[i]).style.display = "none" }
-               else { document.getElementById(divNum[i]).style.display = "block" }
-           }
-       else { document.getElementById(divNum[i]).style.display = "none"; }
-   }
-}
+         var divNum = new Array("a1", "a2", "a3", "a4", "a5"); 
+         function openClose(theID) {
+             for(var i=0; i < divNum.length; i++) {
+              if (divNum[i] == theID) {
+               if (document.getElementById(divNum[i]).style.display == "block") { document.getElementById(divNum[i]).style.display = "none" }
+                   else { document.getElementById(divNum[i]).style.display = "block" }
+               }
+           else { document.getElementById(divNum[i]).style.display = "none"; }
+       }
+    }
 
-function openAll() {
- for(var i=0; i < divNum.length; i++) {
-   document.getElementById(divNum[i]).style.display = "block";
-}
-}
+    function openAll() {
+     for(var i=0; i < divNum.length; i++) {
+       document.getElementById(divNum[i]).style.display = "block";
+        }
+    }
 
-function closeAll() {
- for(var i=0; i < divNum.length; i++) {
-   document.getElementById(divNum[i]).style.display = "none";
-}
-}
-    // -->
-</script>
+    function closeAll() {
+     for(var i=0; i < divNum.length; i++) {
+       document.getElementById(divNum[i]).style.display = "none";
+        }
+    }
+        // -->
+    </script>
 
-</head>
+    </head>
 
-<body>
+    <body>
 
-    <footer>
-        <div id="wrap">
-            <a href="/"><div id="banner"></div></a>
-        </div>
-    </footer> 
-
-    <div id="main">
-
-        <div class="boxed">
-
-            <div id="title">
-              <img src="static/yelpLogo.png" style="vertical-align:middle" alt="Yelp" width="24" height="28">&nbsp;&nbsp;&nbsp;<a href="/yelp" target="_blank">Yelp Photos</a><br/>
-<!--              <img src="static/yelpLogo.png" style="vertical-align:middle" alt="Yelp" width="24" height="28">&nbsp;&nbsp;&nbsp;Yelp Photos<br/>-->
+        <footer>
+            <div id="wrap">
+                <a href="/"><div id="banner"></div></a>
             </div>
+        </footer> 
 
-<!--            <img src="static/yelp_photos_screenshot.jpeg" style="vertical-align:middle"  alt="Yelp Photos" width="532" height="359"><br/>-->
-            <br/><a href="/yelp" target="_    blank"><img src="static/yelp-photos.jpeg" style="vertical-align:middle"  alt="Yelp Photos" width="651" height="362"></a><br/><br/>
-            Yelp search results displayed as rows of user photos.  Implemented in Python with Flask, using non-blocking API requests and web-scraping.<br/><br/><br/><br/>
+        <div id="main">
 
-            <div id="title">
-              <a href="http://www.linkedin.com/in/kdkwak" target="_blank"><img src="static/linkedinLogo.png" style="vertical-align:middle" alt="LinkedIn" width="37" height="28">&nbsp;&nbsp;&nbsp;KD Kwak | Experience</a>
-            </div>
-            <!--<div onClick="openClose('a1')" style="cursor:hand; cursor:pointer; font-family:verdana,arial,helvetica,sans-serif; font-size:10pt"> -->
-            <div>
-		<a href="http://www.linkedin.com/in/kdkwak" target="_blank">
-	        www.linkedin.com/in/kdkwak
-                </a><br/><br/>
-            </div>
+            <div class="boxed">
 
-            <div onClick="openClose('a1')" style="cursor:hand; cursor:pointer;">Research Scientist / Software Engineer, Symbotic<br/>
+                <div id="title">
+                  <img src="static/yelpLogo.png" style="vertical-align:middle" alt="Yelp" width="24" height="28">&nbsp;&nbsp;&nbsp;<a href="/yelp" target="_blank">Yelp Photos</a><br/>
+                </div>
 
-            • Successfully led first phase of a crucial project&nbsp;<font style="color:blue"><<</font><br/><br/>
-            </div>
+                <br/><a href="/yelp" target="_    blank"><img src="static/yelp-photos.jpeg" style="vertical-align:middle"  alt="Yelp Photos" width="651" height="362"></a><br/><br/>
+                Yelp search results displayed as rows of user photos.  Implemented in Python with Flask, using non-blocking API requests and web-scraping.<br/><br/><br/><br/>
 
-            <div id="a1" align="left" class="texter">
-                <div class="textbox">
-                <B>"In 2014, Symbotic began working with Target Corp."</B>
-                    <span class="citation">
-                    www.auvsi.org/blogs/auvsi-news/2016/09/21/symbotic-llc-offering-autonomous-technology-for-distribution-centers
+                <div id="title">
+                  <a href="http://www.linkedin.com/in/kdkwak" target="_blank"><img src="static/linkedinLogo.png" style="vertical-align:middle" alt="LinkedIn" width="37" height="28">&nbsp;&nbsp;&nbsp;KD Kwak | Experience</a>
+                </div>
+
+                <div>
+    		    <a href="http://www.linkedin.com/in/kdkwak" target="_blank">
+    	        www.linkedin.com/in/kdkwak
+                    </a><br/><br/>
+                </div>
+
+                <div onClick="openClose('a1')" style="cursor:hand; cursor:pointer;">Research Scientist / Software Engineer, Symbotic<br/>
+
+                • Successfully led first phase of a crucial project&nbsp;<font style="color:blue"><<</font><br/><br/>
+                </div>
+
+                <div id="a1" align="left" class="texter">
+                    <div class="textbox">
+                    <B>"In 2014, Symbotic began working with Target Corp."</B>
+                        <span class="citation">
+                        www.auvsi.org/blogs/auvsi-news/2016/09/21/symbotic-llc-offering-autonomous-technology-for-distribution-centers
+                        </span>
+                    <p>It was critical to validate main control functions and algorithms by simulation prior to implementation in software.  
+                    Recruited and trained team members on algorithms and control codes, integrated C# control code with discrete event simulator via message passing, and performed validations successfully in time.  
+                    <p>The project was deemed "Mission critical to the success of Symbotic."
+                    </div>
+                    <br/>
+                </div>
+
+
+                <div onClick="openClose('a2')" style="cursor:hand; cursor:pointer;">
+                • Identified opportunity for $2M cost reduction (10%)&nbsp;<font style="color:blue"><<</font><br/><br/>
+                </div>
+
+                <div id="a2" align="left" class="texter">
+                    <div class="textbox">
+                    <p>Took initiative to explore new opportunities to enhance performance and reduce cost, discovered potential to reduce cost by optimizing system foot print, demonstrated its feasibilty by simulation, integrated into next generation system.
+                    </div>
+                    <br/>
+                </div>
+
+
+                <div onClick="openClose('a3')" style="cursor:hand; cursor:pointer;">Software Engineer Intern, Co57<br/>
+
+                • Implemented prototype "unsupervised" object recognition&nbsp;<font style="color:blue"><<</font><br/><br/>
+                </div>
+
+                <div id="a3" align="left" class="texter">
+                    <div class="textbox">
+                    After careful research on published literature for object recognition, extracted and modified the core algorithm of the histogram of oriented gradients object recognition method, in order to recognize object segments and clusters.  
+                    <p>To be used towards Darpa Mind's Eye project (detecting and predicting human actions) 
+                    <span class="citation">https://en.wikipedia.org/wiki/Mind's_Eye_(US_military)</span>
+                    </div>
+                    <br/>
+                </div>
+
+
+                <div onClick="openClose('a4')" style="cursor:hand; cursor:pointer;">Technician / Software Engineer, MIT&nbsp;<br/>
+
+                • Achieved 70% reduction in runtime (e.g., 10 days to 3 days) ...&nbsp;<font style="color:blue"><<</font><br/><br/>
+                </div>
+
+                <div id="a4" align="left" class="texter">
+                    <div class="textbox">
+                    of a complex protein-design software that ran on clusters by fixing a previously unknown bug.  (Perl)
+                    <p>
+                    <a href="http://groups.csail.mit.edu/tidor/research/lippow.php" target="_blank"><img src="static/protein-design.jpeg" style="vertical-align:middle" alt="protein design software" width="360" height="237"><font style="color:blue"> <<</font></a><br>
+                    <span class="citation">Visualizing interactions of a protein and its target molecule
                     </span>
-                <p>It was critical to validate main control functions and algorithms by simulation prior to implementation in software.  
-                Recruited and trained team members on algorithms and control codes, integrated C# control code with discrete event simulator via message passing, and performed validations successfully in time.  
-                <p>The project was deemed "Mission critical to the success of Symbotic."
+                    </div>
+                    <br>
+                </div>         
+
+                <div onClick="openClose('a5')" style="cursor:hand; cursor:pointer;">Senior Software Engineer<br/>
+
+                • Developed integrated software for Nikon digital microscope&nbsp;<font style="color:blue"><<</font><br/><br/>
                 </div>
-                <br/>
-            </div>
 
+                <div id="a5" align="left" class="texter">
+                    <div class="textbox">
+                    <B>"Nikon digital microscope featuring integrated software ... developed by Bacus Laboratories." </B>
+                        <span class="citation">
+                            www.nikoninstruments.com/About-Nikon/News-Room/US-News/Nikon-Introduces-COOLSCOPE-VS
+                        </span>
+                    <p>
+                    <a href="http://www.nikonusa.com/fileuploads/pdfs/Instruments/CoolScopeVSBrochure.pdf" target="_blank"><img src="static/nikon-coolscope-small.jpeg" style="vertical-align:middle" alt="Nikon Coolscope" width="360" height="252"><font style="color:blue"> <<</font></a>
+                    </div>
+                    <p>
 
-            <div onClick="openClose('a2')" style="cursor:hand; cursor:pointer;">
-            • Identified opportunity for $2M cost reduction (10%)&nbsp;<font style="color:blue"><<</font><br/><br/>
-            </div>
-
-            <div id="a2" align="left" class="texter">
-                <div class="textbox">
-                <p>Took initiative to explore new opportunities to enhance performance and reduce cost, discovered potential to reduce cost by optimizing system foot print, demonstrated its feasibilty by simulation, integrated into next generation system.
-                </div>
-                <br/>
-            </div>
-
-
-            <div onClick="openClose('a3')" style="cursor:hand; cursor:pointer;">Software Engineer Intern, Co57<br/>
-
-            • Implemented prototype "unsupervised" object recognition&nbsp;<font style="color:blue"><<</font><br/><br/>
-            </div>
-
-            <div id="a3" align="left" class="texter">
-                <div class="textbox">
-                After careful research on published literature for object recognition, extracted and modified the core algorithm of the histogram of oriented gradients object recognition method, in order to recognize object segments and clusters.  
-                <p>To be used towards Darpa Mind's Eye project (detecting and predicting human actions) 
-                <span class="citation">https://en.wikipedia.org/wiki/Mind's_Eye_(US_military)</span>
-                </div>
-                <br/>
-            </div>
-
-
-            <div onClick="openClose('a4')" style="cursor:hand; cursor:pointer;">Technician / Software Engineer, MIT&nbsp;<br/>
-
-            • Achieved 70% reduction in runtime (e.g., 10 days to 3 days) ...&nbsp;<font style="color:blue"><<</font><br/><br/>
-            </div>
-
-            <div id="a4" align="left" class="texter">
-                <div class="textbox">
-                of a complex protein-design software that ran on clusters by fixing a previously unknown bug.  (Perl)
-                <p>
-                <a href="http://groups.csail.mit.edu/tidor/research/lippow.php" target="_blank"><img src="static/protein-design.jpeg" style="vertical-align:middle" alt="protein design software" width="360" height="237"><font style="color:blue"> <<</font></a><br>
-                <span class="citation">Visualizing interactions of a protein and its target molecule
-                </span>
-                </div>
-                <br>
-            </div>
-
-<!--             <div id="a3" align="left" class="texter"><br>
-                <div class="textbox">
-                <B>"Protein design as an optimization problem"</B><br/>
-                <font style="color:gray"><span class="citation">The goal of protein design is to find a protein sequence that will fold to a target structure. A protein design algorithm must, therefore, search all the conformations of each sequence ... The number of candidate protein sequences, however, grows exponentially with the number of protein residues ... </span></font><B>[this] class of problems is NP-hard, in practice many instances ... can be solved exactly or optimized satisfactorily through heuristic methods.</B>
-                <span class="citation">https://en.wikipedia.org/wiki/</span>
-                </div>
-                <br/>
-            </div> -->
-
-
-
- <!--            <div id="a4" align="left" class="texter">
-                <div class="textbox">
-                <B>Computational protein design: </B>
-                <span class="citation">http://groups.csail.mit.edu/tidor/research/lippow.php</span>
-                </div>
-                <br/>
-            </div>   -->          
-
-            <div onClick="openClose('a5')" style="cursor:hand; cursor:pointer;">Senior Software Engineer<br/>
-
-            • Developed integrated software for Nikon digital microscope&nbsp;<font style="color:blue"><<</font><br/><br/>
-            </div>
-
-            <div id="a5" align="left" class="texter">
-                <div class="textbox">
-                <B>"Nikon digital microscope featuring integrated software ... developed by Bacus Laboratories." </B>
-                    <span class="citation">
-                        www.nikoninstruments.com/About-Nikon/News-Room/US-News/Nikon-Introduces-COOLSCOPE-VS
+                    <div class="textbox">
+                    Created applications that allow tissue microscope slides to be scanned, digitally stored and analyzed, including viewer for scanned images à la Google Map, and analysis software for pathology classification. (Delphi, Object Pascal)<br><br>
+                    <img src="static/image-analysis.jpeg" style="vertical-align:middle"  alt="image analysis" width="360" height="280"><br/>
+                    <span class="citation">Analysing nuclear content, membrane content and cytoplasmic content of cells
                     </span>
-                <p>
-                <a href="http://www.nikonusa.com/fileuploads/pdfs/Instruments/CoolScopeVSBrochure.pdf" target="_blank"><img src="static/nikon-coolscope-small.jpeg" style="vertical-align:middle" alt="Nikon Coolscope" width="360" height="252"><font style="color:blue"> <<</font></a>
+                    </div>
                 </div>
-                <p>
+                <br/><br/>
 
-                <div class="textbox">
-                Created applications that allow tissue microscope slides to be scanned, digitally stored and analyzed, including viewer for scanned images à la Google Map, and analysis software for pathology classification. (Delphi, Object Pascal)<br><br>
-                <img src="static/image-analysis.jpeg" style="vertical-align:middle"  alt="image analysis" width="360" height="280"><br/>
-                <span class="citation">Analysing nuclear content, membrane content and cytoplasmic content of cells
-                </span>
+
+                <div id="title">
+                  <a href="http://www.bitbucket.org/atitan" target="_blank">
+                  <img src="static/bitbucket.png" style="vertical-align:middle" alt="Bitbucket" width="28" height="28">&nbsp;&nbsp;&nbsp;Algorithm and data structure coding exercises.</a>
                 </div>
-            </div>
-            <br/><br/>
 
-
-            <div id="title">
-              <a href="http://www.bitbucket.org/atitan" target="_blank">
-              <img src="static/bitbucket.png" style="vertical-align:middle" alt="Bitbucket" width="28" height="28">&nbsp;&nbsp;&nbsp;Algorithm and data structure coding exercises.</a>
-            </div>
-
-            <div>
-            <a href="http://www.bitbucket.org/atitan" target="_blank">
-            www.bitbucket.org/atitan
-            </a>
-            </div>
-
-
-    <br/><br/><br/><br/><br/><br/>
-
-</div>
-
-</div>
-</body>
-</html>
+                <div>
+                <a href="http://www.bitbucket.org/atitan" target="_blank">
+                www.bitbucket.org/atitan
+                </a>
+                </div>
+        <br/><br/><br/>
+    </div>
+    </div>
+    </body>
+    </html>
 
 
 

@@ -4,7 +4,7 @@ import grequests
 import json
 import urllib 
 
-'''  'yelp2' module is my contribution for extracting photos (biz-photos) '''
+'''  yelp2 module extracts business photos (biz-photos) '''
 
 # Given business 'id', parser scrapes photo-box page of each businesses, and
 # extracts 226x226 biz-photos in 'photo-box-img' tags, to be displayed
@@ -17,7 +17,7 @@ from yelp2.config import SEARCH_LIMIT       # maximum number of businesses displ
 from yelp2.config import PHOTO_LIMIT        # maximum number of biz-photos displayed per row
 from yelp2.config import PIC_FILTER        # filter for biz_photos
 
-# Decorator for businesses json from Yelp search response 
+# Decorator for businesses object from Yelp search response 
 class Businesses(object):
 
     def __init__(self, response):
@@ -43,62 +43,35 @@ class Businesses(object):
         except Exception, e:
             raise
 
-        # get urls for photo-box pages of businesses in order to extract biz-photos
+        # get URLS for photo-box pages of businesses in order to extract biz-photos
         try:
             self.get_photo_urls();
         except Exception, e:
             raise
 
-        # try:
-        #     session = requests.Session()
-        #     # unsent_requests=(grequests.get(url, hooks = {'response' : find_rest_ids}, session=session) for url in self.photo_box_urls)
-        #     unsent_requests=(grequests.get(url, session=session) for url in self.photo_box_urls)
-        #     photo_box_responses = grequests.map(unsent_requests, size=20) 
-        # except Exception, e:
-        #     raise
-
         try:
             session = requests.Session()
+            # get page html from photo-box page of each businesses
             unsent_request = (grequests.get(url, stream=False, session=session) for url in self.photo_box_urls)
-            # returns Request Response object
-            # request.Response.content, .json (**kwargs), .status_code etc.
+            # send non-blocking requests
             photo_box_responses = grequests.map(unsent_request) 
         except Exception, e:
             raise
 
-        # print "self.photo_box_urls is %s" % self.photo_box_urls
-        # retrieve phot-box pages of all the businesses, using non-blocking call
-        # try:
-        #     unsent_request = (grequests.get(url) for url in self.photo_box_urls)
-        #     # returns Request Response object
-        #     # request.Response.content, .json (**kwargs), .status_code etc.
-        #     photo_box_responses = grequests.map(unsent_request) 
-        # except Exception, e:
-        #     raise
-        # print "photo_box_responses is %s" % photo_box_responses[0].status_code
-        # get latitudes and longitudes of businesses, center is average of coordinates
         try:
             self.get_coordinates();
         except Exception, e:
             raise
 
         sStatus = str(photo_box_responses[0].status_code)
-        print "sStatus = %s " % sStatus
-        sUrl = photo_box_responses[0].url
-        print "url = %s " % sUrl
-        #self.html.append(''.join(["&nbsp;&nbsp;", sStatus,"<p><p>&nbsp;&nbsp;", sUrl , "<p><p>"]))#" class='photo_box'",#" id='row is ",
-        #self.html.append("<!-- ")
-        #self.html.append(photo_box_responses[0].text)
-        #self.html.append(" -->")
-        #if isinstance(photo_box_responses[0].text, basestring):
-        #    print "response content is text"
-        #else:
-        #    print "response content is not text"
-        f = open('htmlcontent.txt', 'w')
-        f.write(photo_box_responses[0].text.encode('utf8'))
-        f.close()
 
-        # scrap biz-photos from photo-box pages        
+        sUrl = photo_box_responses[0].url
+
+        # f = open('htmlcontent.txt', 'w')
+        # f.write(photo_box_responses[0].text.encode('utf8'))
+        # f.close()
+
+        # scrap biz-photos img tags from photo-box pages of each business       
         try:
             rank = self.get_html(photo_box_responses);
         except Exception, e:
@@ -106,17 +79,12 @@ class Businesses(object):
 
         # construct response json
         ret_val = { u"status": 'ok',
-                     # u"html": ''.join(photo_box_responses[0].status_code, " ", photo_box_responses[0].url),
                      u"html": ''.join([sStatus, " ", sUrl]),
                      u"html": ''.join(self.html),
                      u"coords": rank+1,
                      u"lats": self.lat,
                      u"lngs": self.lng}        
-        #ret_val = { u"status": 'ok',
-        #            u"html": ''.join(self.html),
-        #            u"coords": rank+1,
-        #            u"lats": self.lat,
-        #            u"lngs": self.lng}
+
         for response in photo_box_responses:
             response.close()
         
@@ -126,7 +94,7 @@ class Businesses(object):
             raise
 
     def get_photo_urls(self):
-        # get biz-photos of businesses up to SEARCH_LIMIT businesses
+        # get biz-photos of each business up to SEARCH_LIMIT number of businesses
         for rank in range(min(SEARCH_LIMIT, len(self.businesses))):
             business = self.businesses[rank]
             if business:
@@ -190,12 +158,8 @@ class Businesses(object):
                 except Exception, e:
                     raise
 
-                #print "biz_photos = %s" % biz_photos
-                self.html.append(''.join(["<span>",#" class='photo_box'",#" id='row is ",
-                                          # str(rank),
-                                          # "' ",
+                self.html.append(''.join(["<span>",
                                           biz_photos,
-                                          # "</span>"]))
                                           "</span></div>"]))
         # return total count businesses
         return rank
@@ -210,7 +174,6 @@ class Businesses(object):
         link_start = ''.join(["<a href='", 
                               BUSINESS_PATH,
                               business['id'],
-                              # "'target='_blank'>"])
                               " 'class='business_link' target='_blank' >" ])
         link_end = "</a>"
 
@@ -219,16 +182,13 @@ class Businesses(object):
                             business['name'], 
                             "</b>"])
 
+        # star image
         if 'rating_img_url_large' in business:
-            # smaller image business['rating_img_url_small']
             rating  = ''.join(["<img class='rating_img' src=' ", 
                                business['rating_img_url_large'],
-                               # "' width='83' height='15'/>"])
-                               # "' width='111' height='20'/>"])
                                "' width='166' height='30'/>"]) # native size
 
         # review count
-        # reviews  = ''.join([" (", str(business['review_count']), " reviews) "])
         if 'review_count' in business:
             reviews  = ''.join(["(",
                                 str(business['review_count']),
@@ -250,12 +210,6 @@ class Businesses(object):
             phone = ''.join([",&nbsp;&nbsp;",
                              business['display_phone']])
 
-        # return ''.join([name, rating, reviews, address])
-        # return ''.join(["&nbsp;", link_start, name, link_end, 
-        #                 "&nbsp;&nbsp;", 
-        #                 link_start, rating, link_end, 
-        #                 "&nbsp;&nbsp;", 
-        #                 link_start, reviews, address, phone, link_end])
         return ''.join(["&nbsp;", link_start, rating, link_end, 
                 "&nbsp;&nbsp;", 
                 link_start, name, link_end, 
@@ -272,7 +226,6 @@ class Businesses(object):
         
         # not enough biz-photos to fill a row, need PHOTO_LIMIT images
         if biz_photos <  PHOTO_LIMIT:
-            # placeholder_img = "<img src='/static/yelp_images/placeholder.jpg' width='226' height='226'/>&nbsp;"
             placeholder_img = "<p>&nbsp;&nbsp; no images"
             for rank in range(PHOTO_LIMIT - biz_photos):
                 new_html.append(placeholder_img)
@@ -283,9 +236,7 @@ class Businesses(object):
     def parse_photo_box_images(self, business_response, photo_limit):
         parser = Parser(PHOTO_LIMIT)
         try:
-            # print business_response.content.decode('utf-8')
             parser.feed(business_response.content.decode('utf-8'))
-            # print "parser data = %s" % parser.data
             html = ''.join(parser.data)
         except Exception, e:
             raise

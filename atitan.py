@@ -24,20 +24,14 @@ IS_PRODUCTION = (os.getenv('PYTHON_ENV', False) == "production")
 if not IS_PRODUCTION:
     app.debug = True
 
+''' landing page '''
 @app.route('/')
 def index():
     return render_template('kd.html')
-    #return render_template('index.html')
 
 ''' "visual" presentation of yelp search results '''
 @app.route('/yelp')
 def yelp():
-    # app.logger.warning('warning message')
-    # app.logger.error('error message')
-    #logging.basicConfig(filename='atitan.log', level=logging.WARNING)
-    #logging.debug('debug message')
-    #logging.info('info message')
-    #logging.warning('warning message')
     # business photos (biz-photos) are extracted from yelp search results, 
     # and displayed one business per row. 
 
@@ -56,76 +50,45 @@ def yelp():
     # util functions to generate search query parameters
     # in case of error default term/category & location values used
     util = Url_Params()
+
     location = util.get_location(client_ip)
     
     # pass location info to yelp page
     return render_template('yelp.html', term=DEFAULT_TERM, loc=location)
 
-
-''' landing page for ATITAN.NET '''
 @app.route('/kd')
 def kd():
      return render_template('kd.html')
 
-@app.route('/coding')
-def coding():
-     return render_template('coding.html')
+# @app.route('/home')
+# def home():
+#      link_id_1 = 'YelpPhotos'      
+#      link_url_1 = '/yelp/'
+#      link_id_2 = 'LinkedIn'    
+#      link_url_2 = 'https://www.linkedin.com/in/gilkwak'
+#      return render_template('indexhtml.html', 
+#                              link_id_1=link_id_1, 
+#                              link_url_1=link_url_1,
+#                              link_id_2=link_id_2, 
+#                              link_url_2=link_url_2)
 
-
-''' landing page for ATITAN.NET '''
-@app.route('/home')
-def home():
-    #if hasattr(sys, 'real_prefix'):
-    #    return render_template('index.html')
-    #else:
-    #    return "no virtual environment found"
-
-     # displays following links:
-     link_id_1 = 'YelpPhotos'       # "visual-yelp page"
-     link_url_1 = '/yelp/'
-     link_id_2 = 'LinkedIn'     # personal LinkedIn page"
-     link_url_2 = 'https://www.linkedin.com/in/gilkwak'
-
-     return render_template('indexhtml.html', 
-                             link_id_1=link_id_1, 
-                             link_url_1=link_url_1,
-                             link_id_2=link_id_2, 
-                             link_url_2=link_url_2)
-
-    
 """ Displays results of Yelp http get request """
 @app.route("/search/", methods=["GET"])
 def main():
-    
-    a = time()     # to measure elapsed time
-
     # decorator for Yelp client for search query & process response for 
     # visual display of results (biz-photos for each businesses)
     yelp = Visual_Yelp()
+
     biz_photos = yelp.biz_photos()
 
-    # print str(time()-a)     # to measure elapsed time
-
-    return biz_photos   # json containing status, html for biz-photos,
-                        # longitudes and latitudes of businesses for google map
-
-# test page for google map
+    # json containing status, html for biz-photos,
+    # longitudes and latitudes of businesses for google map
+    return biz_photos   
+                        
+''' for google map '''
 @app.route('/googlemap/')
 def googlemap():
     return render_template('googlemap.html')
-
-# on-going test page
-@app.route('/gumsa/')
-def test():
-    # browser ip used to obtain geolocation
-    client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    util = Url_Params()
-    location = util.get_location(client_ip) 
-
-    # print "Location is %s." % location
-    return render_template('yelp.html', term=DEFAULT_TERM, loc=location)
-    # return render_template('test.html')
-
 
 if __name__ == "__main__":
     # handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)

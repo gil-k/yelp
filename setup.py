@@ -4,14 +4,14 @@ from setuptools import setup
 setup(
     name='Yelp Photos',
 
-    version='1.4',
+    version='1.43',
 
     description='Yelp search results displays user photos',
 
     url='',
 
     author='KD Kwak',
-    # author_email='gil@atitan.net',
+    # author_email='kd@atitan.net',
 
     # classifiers=[
     #     'License :: OSI Approved :: MIT License',
@@ -22,7 +22,7 @@ setup(
 
     # keywords='yelp', 'photos', 'visual'
 
-    packages=find_packages(exclude=('VENV*',)),
+    packages=find_packages(exclude=('venv*',)),
 
     install_requires=[
         'httplib2',

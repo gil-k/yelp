@@ -114,15 +114,18 @@ function searchYelp(){
     // if input field is empty, populate with default values
     initInputFields();
 
+    // loading animation
     var $loading_overlay = $("#loading_overlay");
     var $spinner = $("#spinner");
     var $spinner_background = $("#spinner_background");
 
+    // term/category and region/location information to search
     var term = document.getElementById('term').value;
     var location = document.getElementById('location').value;
     term = term.trim();
     location = location.trim();
 
+    // construct the search and location term, append to url
     var url = "/search/?term=" + term + "&location=" + location;
 
     window.scrollTo(0, 0);
