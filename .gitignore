@@ -1,13 +1,8 @@
 build
 dist
-VENV
+venv
 Yelp_Photos.egg-info
 **.DS_store
-templates/googlemap.html
-templates/map.html
-templates/master_yelp.html
-templates/test*
-templates/*title*
 **.pyc
 **.swp
 **.log
